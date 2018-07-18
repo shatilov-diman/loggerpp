@@ -20,8 +20,8 @@
 // c) required preservation links to original sources
 //
 // Original sources:
-//   https://github.com/shatilov-diman/libraries/lock_free/
-//   https://bitbucket.org/charivariltd/libraries/lock_free/
+//   https://github.com/shatilov-diman/libraries/tools/
+//   https://bitbucket.org/charivariltd/libraries/tools/
 //
 // Author contacts:
 //   Dmitry Shatilov (e-mail: shatilov.diman@gmail.com; site: https://www.linkedin.com/in/shatilov)
