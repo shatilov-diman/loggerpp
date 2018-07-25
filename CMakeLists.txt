@@ -7,8 +7,9 @@ conan_basic_setup()
 
 add_executable(tests
 	./tests/main.cpp
-	./tests/ordered_queue.cpp
 	./tests/worker.cpp
+	./tests/task_queue.cpp
+	./tests/ordered_queue.cpp
 )
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(tests ${CONAN_LIBS})
