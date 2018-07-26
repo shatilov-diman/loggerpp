@@ -7,6 +7,7 @@ conan_basic_setup()
 
 add_executable(tests
 	./tests/main.cpp
+	./tests/logger.cpp
 	./tests/worker.cpp
 	./tests/task_queue.cpp
 	./tests/ordered_queue.cpp

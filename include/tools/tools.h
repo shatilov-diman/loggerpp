@@ -43,5 +43,57 @@ namespace charivari_ltd::tools
 			throw std::invalid_argument("move_nonnullptr_or_die got nullptr");
 		return std::move(ptr);
 	}
+
+	template <typename arg_t>
+	inline std::string to_string(const arg_t& arg)
+	{
+		return std::to_string(arg);
+	}
+	inline std::string to_string(const std::chrono::system_clock::time_point& time)
+	{
+		return std::to_string(time.time_since_epoch().count());
+	}
+	inline std::string to_string(const std::nullptr_t&)
+	{
+		return "(null)";
+	}
+	inline std::string to_string(const char* arg)
+	{
+		return arg;
+	}
+	inline const std::string& to_string(const std::string& arg)
+	{
+		return arg;
+	}
+	inline std::string to_string(const std::wstring& arg)
+	{
+		return "";
+	}
+
+	template <typename arg_t>
+	inline std::wstring to_wstring(const arg_t& arg)
+	{
+		return std::to_wstring(arg);
+	}
+	inline std::wstring to_wstring(const std::chrono::system_clock::time_point& time)
+	{
+		return std::to_wstring(time.time_since_epoch().count());
+	}
+	inline std::wstring to_wstring(const std::nullptr_t&)
+	{
+		return L"(null)";
+	}
+	inline std::wstring to_string(const wchar_t* arg)
+	{
+		return arg;
+	}
+	inline const std::wstring& to_wstring(const std::wstring& arg)
+	{
+		return arg;
+	}
+	inline std::wstring to_wstring(const std::string& arg)
+	{
+		return L"";
+	}
 } //namespace charivari_ltd::tools
 
