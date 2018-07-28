@@ -1,7 +1,7 @@
-// Project tools
-// Copyright (C) 2016-2017 Dmitry Shatilov
+// Project loggerpp
+// Copyright (C) 2018 Dmitry Shatilov
 //
-// This file is a part of the project tools.
+// This file is a part of the project loggerpp.
 // This file is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -32,12 +32,12 @@
 
 #include "ordered_queue.h"
 #include "worker.h"
-#include "tools.h"
+#include "utils.h"
 
 #include <functional>
 #include <atomic>
 
-namespace charivari_ltd::tools
+namespace charivari_ltd::loggerpp
 {
 	class task_queue
 	{
@@ -103,5 +103,5 @@ namespace charivari_ltd::tools
 		lock_free::ordered_queue<task_t> queue;
 		worker work;
 	};
-} //namespace charivari_ltd::tools
+} //namespace charivari_ltd::loggerpp
 

@@ -1,7 +1,7 @@
-// Project tool
-// Copyright (C) 2016-2017 Dmitry Shatilov
+// Project loggerpp
+// Copyright (C) 2018 Dmitry Shatilov
 //
-// This file is a part of the project tools.
+// This file is a part of the project loggerpp.
 // This file is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -20,8 +20,8 @@
 // c) required preservation links to original sources
 //
 // Original sources:
-//   https://github.com/shatilov-diman/libraries/tools/
-//   https://bitbucket.org/charivariltd/libraries/tools/
+//   https://github.com/shatilov-diman/loggerpp/
+//   https://bitbucket.org/charivariltd/loggerpp/
 //
 // Author contacts:
 //   Dmitry Shatilov (e-mail: shatilov.diman@gmail.com; site: https://www.linkedin.com/in/shatilov)
@@ -30,12 +30,12 @@
 
 #pragma once
 
-#include "tools.h"
+#include "utils.h"
 
 #include <string>
 #include <string_view>
 
-namespace charivari_ltd::tools::log
+namespace charivari_ltd::loggerpp::log
 {
 	struct default_formatter
 	{
@@ -89,6 +89,6 @@ namespace charivari_ltd::tools::log
 			return {};
 		}
 	};
-} //namespace charivari_ltd::tools
+} //namespace charivari_ltd::loggerpp
 
 
