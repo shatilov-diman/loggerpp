@@ -117,7 +117,7 @@ namespace charivari_ltd::loggerpp
 
 	public:
 		template <typename string_t, typename ... args_t>
-		void log(const level& lvl, string_t&& format, args_t&& ... args)
+		void log(const level& lvl, string_t&& format, args_t&& ... args) const
 		{
 			auto&& message = formatter_t::format(std::move(format), std::forward<args_t>(args)...);
 			disp->push(extend_front(tags, {
@@ -128,56 +128,56 @@ namespace charivari_ltd::loggerpp
 		}
 
 		template <typename ... args_t>
-		void log(const level& lvl, const char* message, args_t&& ... args)
+		void log(const level& lvl, const char* message, args_t&& ... args) const
 		{
 			return log(lvl, std::string(message), std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void log(const level& lvl, const wchar_t* message, args_t&& ... args)
+		void log(const level& lvl, const wchar_t* message, args_t&& ... args) const
 		{
 			return log(lvl, std::wstring(message), std::forward<args_t>(args)...);
 		}
 
 	public:
 		template <typename ... args_t>
-		void unknown(args_t&& ... args)
+		void unknown(args_t&& ... args) const
 		{
 			log(level::unknown, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void trace(args_t&& ... args)
+		void trace(args_t&& ... args) const
 		{
 			log(level::trace, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void debug(args_t&& ... args)
+		void debug(args_t&& ... args) const
 		{
 			log(level::debug, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void info(args_t&& ... args)
+		void info(args_t&& ... args) const
 		{
 			log(level::info, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void warning(args_t&& ... args)
+		void warning(args_t&& ... args) const
 		{
 			log(level::warning, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void error(args_t&& ... args)
+		void error(args_t&& ... args) const
 		{
 			log(level::error, std::forward<args_t>(args)...);
 		}
 
 		template <typename ... args_t>
-		void critical(args_t&& ... args)
+		void critical(args_t&& ... args) const
 		{
 			log(level::critical, std::forward<args_t>(args)...);
 		}
