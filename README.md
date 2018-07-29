@@ -1,6 +1,28 @@
 # loggerpp
 
-It's a framework for manage log messages
+It's a framework for manage log messages.
+
+## Notes
+
+All log messages are accumulated in one-thread log dispatcher and next each messages is forwarded to each consumer one by one.
+
+So, do not log too much time, or copy message to another thread.
+
+## Exceptions
+
+By default any exception in consumer will terminate application.
+
+You may override this behavior by pass handler of std::exception_ptr to dispatcher.
+
+## Thread safety
+
+You are allowed to call any methods from any threads while logger object is alive.
+
+Even if you try to add log messages from consumer's thread. But it's not a good idea due to recurtion.
+
+You may subscribe and and unsubscribe to dispatcher from any threads.
+
+Also you may extend tags by call extend_logger & extend_exception from any threads.
 
 ## simple example
 
