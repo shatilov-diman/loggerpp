@@ -1,30 +1,3 @@
-# loggerpp
-
-It's a framework for manage log messages
-
-## simple example
-
-```cpp
-#include <loggerpp/logger.h>
-
-#include <memory>
-
-int main () {
-        using namespace charivari_ltd;
-
-        logger simple(std::make_shared<logger::dispatcher_t>(), {});
-
-        auto subscription = simple.get_dispatcher()->subscribe(loggerpp::default_consumer);
-
-        simple.info("Hello, {}!", "world");
-
-        return 0;
-}
-```
-
-## extended_tags example
-
-```cpp
 
 #include <loggerpp/logger.h>
 
@@ -69,6 +42,4 @@ int main () {
 
 	return 0;
 }
-
-```
 
