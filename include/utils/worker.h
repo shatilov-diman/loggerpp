@@ -61,7 +61,7 @@ namespace charivari_ltd::utils
 			thread = std::thread(std::move(task));
 		}
 
-		void rethrow_exception()
+		void wait_and_rethrow_exception()
 		{
 			if (thread.joinable())
 			{
@@ -72,7 +72,11 @@ namespace charivari_ltd::utils
 
 		~worker()
 		{
-			rethrow_exception();// Try to rethrow exception. Yes, terminating is OK too.
+			try {
+				wait_and_rethrow_exception();
+			} catch (...) {
+				std::terminate();//explicit terminate application if exception wasn't handled by client code
+			}
 		}
 
 	private:

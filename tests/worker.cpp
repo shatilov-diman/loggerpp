@@ -64,7 +64,7 @@ TEST_F(worker_test_suite, check_no_rethrow_exception)
 		worker w([&value] {
 			value = 42;
 		});
-		EXPECT_NO_THROW(w.rethrow_exception());
+		EXPECT_NO_THROW(w.wait_and_rethrow_exception());
 	}
 	EXPECT_EQ(value, 42);
 }
@@ -94,7 +94,7 @@ TEST_F(worker_test_suite, check_exception_without_emergency_bug_get_exception)
 	worker w([] {
 		throw std::runtime_error("error");
 	});
-	EXPECT_THROW(w.rethrow_exception(), std::runtime_error);
+	EXPECT_THROW(w.wait_and_rethrow_exception(), std::runtime_error);
 }
 
 TEST_F(worker_test_suite, check_emergency_handler)
@@ -163,6 +163,6 @@ TEST_F(worker_test_suite, check_exception_at_emergency_bug_get_exception)
 	}, [] (std::exception_ptr e) {
 		throw std::domain_error("error_2");
 	});
-	EXPECT_THROW(w.rethrow_exception(), std::domain_error);
+	EXPECT_THROW(w.wait_and_rethrow_exception(), std::domain_error);
 }
 
