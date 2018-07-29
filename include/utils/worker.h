@@ -36,7 +36,7 @@
 #include <future>
 #include <thread>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd::utils
 {
 	class worker :
 		public noncopyable
@@ -95,5 +95,5 @@ namespace charivari_ltd::loggerpp
 		std::future<void> task_result;
 		std::thread thread;
 	};
-} //namespace charivari_ltd::loggerpp
+} //namespace charivari_ltd::utils
 

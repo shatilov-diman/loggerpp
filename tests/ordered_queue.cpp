@@ -28,13 +28,13 @@
 //
 //
 
-#include <loggerpp/ordered_queue.h>
+#include <utils/ordered_queue.h>
 
 #include <gtest/gtest.h>
 
 #include <thread>
 
-using namespace charivari_ltd::loggerpp::lock_free;
+using namespace charivari_ltd::utils::lock_free;
 
 class ordered_queue_test_suite :
 	public testing::Test

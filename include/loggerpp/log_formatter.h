@@ -30,7 +30,7 @@
 
 #pragma once
 
-#include "utils.h"
+#include "../utils/utils.h"
 
 #include <string>
 #include <string_view>
@@ -83,9 +83,9 @@ namespace charivari_ltd::loggerpp::log
 		static string_t to_string_t(arg_t&& arg)
 		{
 			if constexpr (std::is_same_v<std::decay_t<string_t>, std::string>)
-				return to_string(arg);
+				return utils::to_string(arg);
 			else if constexpr (std::is_same_v<std::decay_t<string_t>, std::wstring>)
-				return to_wstring(arg);
+				return utils::to_wstring(arg);
 			return {};
 		}
 	};

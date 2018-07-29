@@ -30,7 +30,7 @@
 
 #pragma once
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd::utils
 {
 	class noncopyable
 	{
@@ -51,5 +51,5 @@ namespace charivari_ltd::loggerpp
 		nonmoveable& operator=(const nonmoveable&) = default;
 		nonmoveable& operator=(nonmoveable&&) = delete;
 	};
-} //namespace charivari_ltd::loggerpp
+} //namespace charivari_ltd::utils
 

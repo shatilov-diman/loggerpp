@@ -30,9 +30,10 @@
 
 #pragma once
 
-#include "utils.h"
 #include "log_base.h"
 #include "log_formatter.h"
+
+#include "../utils/utils.h"
 
 #include <iostream>
 
@@ -126,33 +127,33 @@ namespace log
 	inline std::string to_string(const log::default_log_traits::key_t& key)
 	{
 		return std::visit([] (const auto& value) {
-			return to_string(value);
+			return utils::to_string(value);
 		}, key);
 	}
 	inline std::wstring to_wstring(const log::default_log_traits::key_t& key)
 	{
 		return std::visit([] (const auto& value) {
-			return to_wstring(value);
+			return utils::to_wstring(value);
 		}, key);
 	}
 	inline std::string to_string(const log::default_log_traits::value_t& value)
 	{
 		return std::visit([] (const auto& value) {
-			return to_string(value);
+			return utils::to_string(value);
 		}, value);
 	}
 	inline std::wstring to_wstring(const log::default_log_traits::value_t& value)
 	{
 		return std::visit([] (const auto& value) {
-			return to_wstring(value);
+			return utils::to_wstring(value);
 		}, value);
 	}
 
 	inline void default_consumer(const log::default_log_traits::tags_t& tags)
 	{
 		std::cout
-			<< to_string(log::get_time(tags)) << '\t'
-			<< to_string(log::get_level(tags)) << '\t'
+			<< utils::to_string(log::get_time(tags)) << '\t'
+			<< utils::to_string(log::get_level(tags)) << '\t'
 			<< log::get_message(tags) << std::endl;
 	}
 

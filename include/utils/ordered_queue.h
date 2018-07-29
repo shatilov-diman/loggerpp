@@ -34,7 +34,7 @@
 #include <utility>
 #include <optional>
 
-namespace charivari_ltd::loggerpp::lock_free
+namespace charivari_ltd::utils::lock_free
 {
 	/* Lock free queue
 	 *  - several writeres
@@ -137,5 +137,4 @@ namespace charivari_ltd::loggerpp::lock_free
 			return ptr;
 		}
 	};
-} //namespace charivari_ltd::loggerpp::lock_free
-
+} //namespace charivari_ltd::utils::lock_free

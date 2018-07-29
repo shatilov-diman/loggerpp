@@ -32,9 +32,9 @@
 
 #include <string>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd
 {
-namespace log
+namespace loggerpp::log
 {
 	enum class level
 	{
@@ -46,35 +46,40 @@ namespace log
 		error,
 		critical,
 	};
-} //namespace log
+} //namespace loggerpp::log
 
-	inline std::string to_string(const log::level& l)
+namespace utils
+{
+	inline std::string to_string(const loggerpp::log::level& l)
 	{
+		using namespace loggerpp::log;
 		switch (l)
 		{
-			case log::level::unknown: return "unknown";
-			case log::level::trace: return "trace";
-			case log::level::debug: return "debug";
-			case log::level::info: return "info";
-			case log::level::warning: return "warning";
-			case log::level::error: return "error";
-			case log::level::critical: return "critical";
+			case level::unknown: return "unknown";
+			case level::trace: return "trace";
+			case level::debug: return "debug";
+			case level::info: return "info";
+			case level::warning: return "warning";
+			case level::error: return "error";
+			case level::critical: return "critical";
 			default: return "undefined";
 		}
 	}
-	inline std::wstring to_wstring(const log::level& l)
+	inline std::wstring to_wstring(const loggerpp::log::level& l)
 	{
+		using namespace loggerpp::log;
 		switch (l)
 		{
-			case log::level::unknown: return L"unknown";
-			case log::level::trace: return L"trace";
-			case log::level::debug: return L"debug";
-			case log::level::info: return L"info";
-			case log::level::warning: return L"warning";
-			case log::level::error: return L"error";
-			case log::level::critical: return L"critical";
+			case level::unknown: return L"unknown";
+			case level::trace: return L"trace";
+			case level::debug: return L"debug";
+			case level::info: return L"info";
+			case level::warning: return L"warning";
+			case level::error: return L"error";
+			case level::critical: return L"critical";
 			default: return L"undefined";
 		}
 	}
-} //namespace charivari_ltd::loggerpp
+} //namespace utils
+} //namespace charivari_ltd
 

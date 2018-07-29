@@ -28,11 +28,11 @@
 //
 //
 
-#include <loggerpp/task_queue.h>
+#include <utils/task_queue.h>
 
 #include <gtest/gtest.h>
 
-using namespace charivari_ltd::loggerpp;
+using namespace charivari_ltd::utils;
 
 class task_queue_test_suite :
 	public testing::Test

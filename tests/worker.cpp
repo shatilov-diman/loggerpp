@@ -28,11 +28,11 @@
 //
 //
 
-#include <loggerpp/worker.h>
+#include <utils/worker.h>
 
 #include <gtest/gtest.h>
 
-using namespace charivari_ltd::loggerpp;
+using namespace charivari_ltd::utils;
 
 class worker_test_suite :
 	public testing::Test

@@ -37,7 +37,7 @@
 #include <functional>
 #include <atomic>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd::utils
 {
 	class task_queue
 	{
@@ -103,5 +103,5 @@ namespace charivari_ltd::loggerpp
 		lock_free::ordered_queue<task_t> queue;
 		worker work;
 	};
-} //namespace charivari_ltd::loggerpp
+} //namespace charivari_ltd::utils
 

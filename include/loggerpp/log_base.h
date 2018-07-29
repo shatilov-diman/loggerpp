@@ -30,10 +30,10 @@
 
 #pragma once
 
-#include "noncopyable.h"
-
 #include "log_level.h"
 #include "log_dispatcher.h"
+
+#include "../utils/noncopyable.h"
 
 #include <deque>
 #include <chrono>
@@ -60,7 +60,7 @@ namespace charivari_ltd::loggerpp::log
 
 	template <typename _traits_t>
 	class logger_base :
-		public noncopyable
+		public utils::noncopyable
 	{
 	public:
 		using traits_t = _traits_t;

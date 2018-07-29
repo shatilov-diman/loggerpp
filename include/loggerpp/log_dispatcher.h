@@ -30,8 +30,8 @@
 
 #pragma once
 
-#include "task_queue.h"
-#include "noncopyable.h"
+#include "../utils/task_queue.h"
+#include "../utils/noncopyable.h"
 
 #include <functional>
 #include <future>
@@ -41,11 +41,11 @@ namespace charivari_ltd::loggerpp::log
 {
 	template <typename tags_t>
 	class dispatcher :
-		public noncopyable
+		public utils::noncopyable
 	{
 	public:
 		using consumer_fn = std::function<void (const tags_t& tags)>;
-		using exception_handler_t = task_queue::exception_handler_t;
+		using exception_handler_t = utils::task_queue::exception_handler_t;
 
 		using consumer_ptr = std::shared_ptr<consumer_fn>;
 
@@ -116,7 +116,7 @@ namespace charivari_ltd::loggerpp::log
 	private:
 		exception_handler_t exception_handler;
 		std::set<consumer_fn*> consumers;
-		task_queue queue;
+		utils::task_queue queue;
 	};
 } //namespace charivari_ltd::loggerpp::log
 

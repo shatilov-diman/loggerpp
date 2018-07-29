@@ -34,7 +34,7 @@
 #include <future>
 #include <thread>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd::utils
 {
 	template <typename type_ptr>
 	static type_ptr move_nonnullptr_or_die(type_ptr&& ptr)
@@ -95,5 +95,5 @@ namespace charivari_ltd::loggerpp
 	{
 		return L"";
 	}
-} //namespace charivari_ltd::loggerpp
+} //namespace charivari_ltd::utils
 
