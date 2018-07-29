@@ -53,7 +53,7 @@ namespace loggerpp
 			value_t value;
 		};
 
-		using tags_t = std::deque<std::pair<key_t, value_t>>;
+		using tags_t = std::deque<item_t>;
 
 		static inline tags_t extend_back(tags_t&& tags, tags_t&& t)
 		{
@@ -82,21 +82,21 @@ namespace loggerpp
 	inline std::chrono::system_clock::time_point get_time(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::chrono::system_clock::time_point>(tags[constants::index_time].second);
+		return std::get<std::chrono::system_clock::time_point>(tags[constants::index_time].value);
 	}
 
 	template<typename tags_t>
 	inline level get_level(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<level>(tags[constants::index_level].second);
+		return std::get<level>(tags[constants::index_level].value);
 	}
 
 	template<typename tags_t>
 	inline std::string get_message(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::string>(tags[constants::index_message].second);
+		return std::get<std::string>(tags[constants::index_message].value);
 	}
 
 	template<typename tags_t>
