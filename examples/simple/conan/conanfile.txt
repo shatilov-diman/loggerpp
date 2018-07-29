@@ -1,0 +1,6 @@
+[requires]
+loggerpp/1.0@charivari_ltd/stable
+
+[generators]
+cmake
+
