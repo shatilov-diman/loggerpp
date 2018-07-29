@@ -32,7 +32,9 @@
 
 #include <gtest/gtest.h>
 
-using namespace charivari_ltd::loggerpp;
+using namespace charivari_ltd;
+
+using dispatcher = logger::dispatcher_t;
 
 class logger_test_suite :
 	public testing::Test
@@ -41,13 +43,13 @@ class logger_test_suite :
 
 TEST_F(logger_test_suite, empty)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	(void)root;
 }
 
 TEST_F(logger_test_suite, add_remove_subscription)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription = root.get_dispatcher()->subscribe([] (const auto& tags) {
 		});
@@ -57,19 +59,19 @@ TEST_F(logger_test_suite, add_remove_subscription)
 
 TEST_F(logger_test_suite, log_without_consumer)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	root.debug("Test");
 }
 
 TEST_F(logger_test_suite, log_messages_with_consumer)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	root.debug("1");
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check.push_back(log::get_message(tags));
+			check.push_back(get_message(tags));
 		});
 		root.debug("2");
 	}
@@ -82,17 +84,17 @@ TEST_F(logger_test_suite, log_two_consumers)
 {
 	std::vector<std::string> check1;
 	std::vector<std::string> check2;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription1 = root.get_dispatcher()->subscribe([&check1] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check1.push_back(log::get_message(tags));
+			check1.push_back(get_message(tags));
 		});
 		root.debug("1");
 		{
 			auto subscription2 = root.get_dispatcher()->subscribe([&check2] (const auto& tags) {
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-				check2.push_back(log::get_message(tags));
+				check2.push_back(get_message(tags));
 			});
 			root.debug("2");
 		}
@@ -108,7 +110,7 @@ TEST_F(logger_test_suite, log_two_consumers)
 
 TEST_F(logger_test_suite, check_extend_tags)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});
@@ -124,15 +126,15 @@ TEST_F(logger_test_suite, check_extend_tags)
 	}
 
 	EXPECT_EQ(check.size(), 1);
-	EXPECT_EQ(log::get_message(check[0]), "test");
-	EXPECT_EQ(log::get_level(check[0]), log::level::debug);
-	//EXPECT_EQ(log::get_tag<std::wstring>(check[0], "aaa"), L"BBB");
-	//EXPECT_EQ(std::get<std::wstring>(*log::get_tag(check[0], "aaa")), L"BBB");
+	EXPECT_EQ(get_message(check[0]), "test");
+	EXPECT_EQ(get_level(check[0]), loggerpp::level::debug);
+	//EXPECT_EQ(get_tag<std::wstring>(check[0], "aaa"), L"BBB");
+	//EXPECT_EQ(std::get<std::wstring>(*get_tag(check[0], "aaa")), L"BBB");
 }
 
 TEST_F(logger_test_suite, check_extend_exception)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});
@@ -144,25 +146,25 @@ TEST_F(logger_test_suite, check_extend_exception)
 			check.push_back(tags);
 		});
 
-		log::extend_exception(x, std::runtime_error("AAAA"))
+		extend_exception(x, std::runtime_error("AAAA"))
 			.error("fail");
 	}
 
 	EXPECT_EQ(check.size(), 1);
-	EXPECT_EQ(log::get_message(check[0]), "fail");
-	EXPECT_EQ(log::get_level(check[0]), log::level::error);
-	//EXPECT_EQ(log::get_tag<std::string>(check[0], log::constants::key_exception_type), std::string{"St13runtime_error"});
-	//EXPECT_EQ(log::get_tag<std::string>(check[0], log::constants::key_exception_message), std::string{"AAAA"});
+	EXPECT_EQ(get_message(check[0]), "fail");
+	EXPECT_EQ(get_level(check[0]), loggerpp::level::error);
+	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_type), std::string{"St13runtime_error"});
+	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_message), std::string{"AAAA"});
 }
 
 TEST_F(logger_test_suite, check_formatter_no_placeholder)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check.push_back(log::get_message(tags));
+			check.push_back(get_message(tags));
 		});
 		root.debug("CCC", "BBB");
 	}
@@ -173,11 +175,11 @@ TEST_F(logger_test_suite, check_formatter_no_placeholder)
 TEST_F(logger_test_suite, check_formatter_no_arg)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check.push_back(log::get_message(tags));
+			check.push_back(get_message(tags));
 		});
 		root.debug("{}");
 	}
@@ -188,11 +190,11 @@ TEST_F(logger_test_suite, check_formatter_no_arg)
 TEST_F(logger_test_suite, check_formatter)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check.push_back(log::get_message(tags));
+			check.push_back(get_message(tags));
 		});
 		root.debug("{}", "BBB");
 	}
@@ -203,11 +205,11 @@ TEST_F(logger_test_suite, check_formatter)
 TEST_F(logger_test_suite, check_formatter_ex)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			check.push_back(log::get_message(tags));
+			check.push_back(get_message(tags));
 		});
 		root.debug("AAA {} CCC", "BBB");
 	}
@@ -217,15 +219,15 @@ TEST_F(logger_test_suite, check_formatter_ex)
 
 TEST_F(logger_test_suite, check_default_consumer)
 {
-	logger root{std::make_shared<log::dispatcher<logger::tags_t>>(), {}};
+	logger root{std::make_shared<dispatcher>(), {}};
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});
 
 	{
-		auto subscription = root.get_dispatcher()->subscribe(default_consumer);
+		auto subscription = root.get_dispatcher()->subscribe(loggerpp::default_consumer);
 		root.debug("AAA {} CCC", "BBB");
-		log::extend_exception(x, std::runtime_error("AAAA"))
+		extend_exception(x, std::runtime_error("AAAA"))
 			.error("fail");
 	}
 

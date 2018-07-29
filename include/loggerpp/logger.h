@@ -37,9 +37,9 @@
 
 #include <iostream>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd
 {
-namespace log
+namespace loggerpp
 {
 	struct default_log_traits
 	{
@@ -122,41 +122,41 @@ namespace log
 			return { std::get<type_t>(*opt) };
 		return {};
 	}
-} //namespace log
 
-	inline std::string to_string(const log::default_log_traits::key_t& key)
+	inline std::string to_string(const default_log_traits::key_t& key)
 	{
 		return std::visit([] (const auto& value) {
 			return utils::to_string(value);
 		}, key);
 	}
-	inline std::wstring to_wstring(const log::default_log_traits::key_t& key)
+	inline std::wstring to_wstring(const default_log_traits::key_t& key)
 	{
 		return std::visit([] (const auto& value) {
 			return utils::to_wstring(value);
 		}, key);
 	}
-	inline std::string to_string(const log::default_log_traits::value_t& value)
+	inline std::string to_string(const default_log_traits::value_t& value)
 	{
 		return std::visit([] (const auto& value) {
 			return utils::to_string(value);
 		}, value);
 	}
-	inline std::wstring to_wstring(const log::default_log_traits::value_t& value)
+	inline std::wstring to_wstring(const default_log_traits::value_t& value)
 	{
 		return std::visit([] (const auto& value) {
 			return utils::to_wstring(value);
 		}, value);
 	}
 
-	inline void default_consumer(const log::default_log_traits::tags_t& tags)
+	inline void default_consumer(const default_log_traits::tags_t& tags)
 	{
 		std::cout
-			<< utils::to_string(log::get_time(tags)) << '\t'
-			<< utils::to_string(log::get_level(tags)) << '\t'
-			<< log::get_message(tags) << std::endl;
+			<< utils::to_string(get_time(tags)) << '\t'
+			<< utils::to_string(get_level(tags)) << '\t'
+			<< get_message(tags) << std::endl;
 	}
+} //namespace loggerpp
 
-	using logger = log::logger_base<log::default_log_traits>;
-} //namespace charivari_ltd::loggerpp
+	using logger = loggerpp::logger_base<loggerpp::default_log_traits>;
+} //namespace charivari_ltd
 

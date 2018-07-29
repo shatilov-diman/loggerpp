@@ -37,7 +37,7 @@
 #include <future>
 #include <set>
 
-namespace charivari_ltd::loggerpp::log
+namespace charivari_ltd::loggerpp
 {
 	template <typename tags_t>
 	class dispatcher :
@@ -118,5 +118,5 @@ namespace charivari_ltd::loggerpp::log
 		std::set<consumer_fn*> consumers;
 		utils::task_queue queue;
 	};
-} //namespace charivari_ltd::loggerpp::log
+} //namespace charivari_ltd::loggerpp
 

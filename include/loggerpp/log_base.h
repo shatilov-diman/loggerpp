@@ -42,7 +42,7 @@
 #include <optional>
 #include <type_traits>
 
-namespace charivari_ltd::loggerpp::log
+namespace charivari_ltd::loggerpp
 {
 	namespace constants
 	{
@@ -70,7 +70,8 @@ namespace charivari_ltd::loggerpp::log
 		using tags_t = typename traits_t::tags_t;
 		using formatter_t = typename traits_t::formatter_t;
 
-		using dispatcher_ptr = std::shared_ptr<dispatcher<tags_t>>;
+		using dispatcher_t = dispatcher<tags_t>;
+		using dispatcher_ptr = std::shared_ptr<dispatcher_t>;
 
 	public:
 
@@ -201,5 +202,5 @@ namespace charivari_ltd::loggerpp::log
 			{constants::key_exception_message, std::string{t.what()}},
 		});
 	}
-} //namespace charivari_ltd::loggerpp::log
+} //namespace charivari_ltd::loggerpp
 

@@ -35,7 +35,7 @@
 #include <string>
 #include <string_view>
 
-namespace charivari_ltd::loggerpp::log
+namespace charivari_ltd::loggerpp
 {
 	struct default_formatter
 	{
