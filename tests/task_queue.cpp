@@ -52,7 +52,7 @@ TEST_F(task_queue_test_suite, default_task_queue_terminate_app_on_exception)
 		queue.push([] {
 			throw std::runtime_error("exception");
 		});
-	}, "terminate called after throwing an instance of 'std::runtime_error'");
+	}, "");
 }
 
 TEST_F(task_queue_test_suite, task_queue_with_nullptr_exceptions_handler_throws_exception)

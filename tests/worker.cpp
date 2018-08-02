@@ -86,7 +86,7 @@ TEST_F(worker_test_suite, check_app_is_terminating_if_exception_have_not_taken)
 			throw std::runtime_error("error");
 		});
 		(void)w;
-	}, "terminate called after throwing an instance of 'std::runtime_error'");
+	}, "");
 }
 
 TEST_F(worker_test_suite, check_exception_without_emergency_bug_get_exception)
@@ -153,7 +153,7 @@ TEST_F(worker_test_suite, check_app_is_terminating_if_exception_while_emergency_
 			throw std::domain_error("error_2");
 		});
 		(void)w;
-	}, "terminate called after throwing an instance of 'std::domain_error'");
+	}, "");
 }
 
 TEST_F(worker_test_suite, check_exception_at_emergency_bug_get_exception)
