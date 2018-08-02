@@ -31,6 +31,7 @@
 #pragma once
 
 #include <exception>
+#include <string>
 #include <future>
 #include <thread>
 

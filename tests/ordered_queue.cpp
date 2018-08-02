@@ -32,6 +32,7 @@
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <thread>
 
 using namespace charivari_ltd::utils::lock_free;

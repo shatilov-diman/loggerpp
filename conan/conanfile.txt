@@ -1,5 +1,5 @@
 [requires]
-gtest/1.8.0@bincrafters/stable
+gtest/master@conan/dev
 
 [generators]
 cmake
