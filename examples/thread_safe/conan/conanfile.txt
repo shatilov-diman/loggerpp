@@ -1,0 +1,6 @@
+[requires]
+loggerpp/1.0@conan/dev
+
+[generators]
+cmake
+
