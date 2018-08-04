@@ -1,5 +1,5 @@
 [requires]
-loggerpp/1.0@charivari_ltd/stable
+loggerpp/1.0@conan/dev
 
 [generators]
 cmake
