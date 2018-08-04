@@ -21,12 +21,12 @@ class LoggerConan(ConanFile):
 	def source(self):
 		self.run("git clone https://github.com/shatilov-diman/loggerpp.git .")
 
-	def build(self):
+	def test(self):
 		cmake = CMake(self)
 		cmake.configure()
 		cmake.build()
 
-		self.run("./bin/tests")
+		self.run(os.path.join(self.build_folder, "bin", "tests"))
 
 	def package(self):
 		self.copy("*.h")
