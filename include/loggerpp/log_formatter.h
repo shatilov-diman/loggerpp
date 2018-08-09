@@ -60,7 +60,7 @@ namespace charivari_ltd::loggerpp
 			return out;
 		}
 
-	private:
+	protected:
 		template <typename string_t, typename string_view_t, typename arg_t, typename ... args_t>
 		static void format_impl(string_t& out, const string_view_t& format, const string_t& delim, arg_t&& arg, args_t&& ... args)
 		{
@@ -81,7 +81,7 @@ namespace charivari_ltd::loggerpp
 			out.append(format);
 		}
 
-	private:
+	protected:
 		template <typename string_t, typename arg_t>
 		static string_t to_string_t(arg_t&& arg)
 		{
