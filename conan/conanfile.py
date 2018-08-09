@@ -6,7 +6,7 @@ class LoggerConan(ConanFile):
 	version="1.0"
 	description = "charivari's logger framework"
 	url = "https://github.com/shatilov-diman/loggerpp"
-	license = "GPL v3"
+	license = "MIT License"
 
 	settings = "os", "compiler", "build_type", "arch"
 	options = {"shared": [True, False]}
