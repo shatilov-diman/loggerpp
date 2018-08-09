@@ -218,3 +218,53 @@ int main () {
 }
 ```
 
+## custom formatter example
+
+```cpp
+#include <loggerpp/logger.h>
+
+#include <memory>
+
+struct my_formatter :
+	charivari_ltd::loggerpp::default_formatter
+{
+	template <typename ... args_t>
+	static std::string format(const std::string& format, args_t&& ... args)
+	{
+		std::basic_string_view<char> view(format.data(), format.size());
+		std::string out;
+		format_impl(out, view, std::string{"69"}, std::forward<args_t>(args)...);
+		return "superlogger: " + out;
+	}
+
+	template <typename ... args_t>
+	static std::wstring format(const std::wstring& format, args_t&& ... args)
+	{
+		std::basic_string_view<wchar_t> view(format.data(), format.size());
+		std::wstring out;
+		format_impl(out, view, std::wstring{L"69"}, std::forward<args_t>(args)...);
+		return L"superlogger: " + out;
+	}
+};
+
+struct my_log_traits :
+	charivari_ltd::loggerpp::default_log_traits
+{
+	using formatter_t = my_formatter;
+};
+
+using my_logger = charivari_ltd::loggerpp::logger_base<my_log_traits>;
+
+int main () {
+	using namespace charivari_ltd;
+
+	my_logger custom(std::make_shared<logger::dispatcher_t>(), {});
+
+	auto subscription = custom.get_dispatcher()->subscribe(loggerpp::default_consumer);
+
+	custom.info("Hello, 69!", "world");
+
+	return 0;
+}
+```
+
