@@ -74,9 +74,9 @@ private:
 			local.debug("Before extend");
 			{
 				//this subscribtion catch only 'extend message' message
-				auto subscription = local.get_dispatcher()->subscribe([name](const auto& tags) {
+				auto subscription = local >> [name](const auto& tags) {
 					std::cerr << name << ": " << loggerpp::get_message(tags) << std::endl;
-				});
+				};
 
 				loggerpp::extend_logger(local, { {"timer", std::chrono::system_clock::now()} })
 					.info("extend message");
@@ -95,11 +95,11 @@ private:
 int main () {
 	logger root;
 
-	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
+	auto subscription = root >> [](const auto& tags) {
 		for (const auto& tag : tags)
 			std::cout << loggerpp::to_string(tag.value) << '\t';
 		std::cout << std::endl;
-	});
+	};
 
 	Application app(root);
 

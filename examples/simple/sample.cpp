@@ -40,7 +40,7 @@ int main () {
 
 	logger simple;
 
-	auto subscription = simple.get_dispatcher()->subscribe(loggerpp::default_consumer);
+	auto subscription = simple >> loggerpp::default_consumer;
 
 	simple.info("Hello, {}!", "world");
 

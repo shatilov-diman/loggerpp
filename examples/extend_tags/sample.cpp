@@ -64,11 +64,11 @@ private:
 int main () {
 	logger root;
 
-	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
+	auto subscription = root >> [](const auto& tags) {
 		for (const auto& tag : tags)
 			std::cout << loggerpp::to_string(tag.key) << ":" << loggerpp::to_string(tag.value) << '\t';
 		std::cout << std::endl;
-	});
+	};
 
 	Application app(root);
 

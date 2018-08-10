@@ -37,8 +37,6 @@
 
 using namespace charivari_ltd;
 
-using dispatcher = logger::dispatcher_t;
-
 class logger_test_suite :
 	public testing::Test
 {
@@ -57,6 +55,16 @@ TEST_F(logger_test_suite, add_remove_subscription)
 		auto subscription = root.get_dispatcher()->subscribe([] (const auto& tags) {
 		});
 		(void)subscription;
+	}
+}
+
+TEST_F(logger_test_suite, add_remove_subscription_by_shift_operator)
+{
+	logger root;
+	{
+		auto s = root >> [] (const auto& tags) {
+		};
+		(void)s;
 	}
 }
 
@@ -89,16 +97,16 @@ TEST_F(logger_test_suite, log_two_consumers)
 	std::vector<std::string> check2;
 	logger root;
 	{
-		auto subscription1 = root.get_dispatcher()->subscribe([&check1] (const auto& tags) {
+		auto subscription1 = root >> [&check1] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check1.push_back(get_message(tags));
-		});
+		};
 		root.debug("1");
 		{
-			auto subscription2 = root.get_dispatcher()->subscribe([&check2] (const auto& tags) {
+			auto subscription2 = root >> [&check2] (const auto& tags) {
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				check2.push_back(get_message(tags));
-			});
+			};
 			root.debug("2");
 		}
 		root.debug("3");
@@ -120,10 +128,10 @@ TEST_F(logger_test_suite, check_extend_tags)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
-		});
+		};
 
 		x.debug("test");
 	}
@@ -144,10 +152,10 @@ TEST_F(logger_test_suite, check_extend_exception)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
-		});
+		};
 
 		extend_exception(x, std::runtime_error("AAAA"))
 			.error("fail");
@@ -165,10 +173,10 @@ TEST_F(logger_test_suite, check_formatter_no_placeholder)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
-		});
+		};
 		root.debug("CCC", "BBB");
 	}
 	EXPECT_EQ(check.size(), 1);
@@ -180,10 +188,10 @@ TEST_F(logger_test_suite, check_formatter_no_arg)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
-		});
+		};
 		root.debug("{}");
 	}
 	EXPECT_EQ(check.size(), 1);
@@ -195,10 +203,10 @@ TEST_F(logger_test_suite, check_formatter)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
-		});
+		};
 		root.debug("{}", "BBB");
 	}
 	EXPECT_EQ(check.size(), 1);
@@ -210,10 +218,10 @@ TEST_F(logger_test_suite, check_formatter_ex)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
-		});
+		};
 		root.debug("AAA {} CCC", "BBB");
 	}
 	EXPECT_EQ(check.size(), 1);
@@ -228,7 +236,7 @@ TEST_F(logger_test_suite, check_default_consumer)
 	});
 
 	{
-		auto subscription = root.get_dispatcher()->subscribe(loggerpp::default_consumer);
+		auto subscription = root >> loggerpp::default_consumer;
 		root.debug("AAA {} CCC", "BBB");
 		extend_exception(x, std::runtime_error("AAAA"))
 			.error("fail");

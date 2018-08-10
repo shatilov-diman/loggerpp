@@ -207,5 +207,12 @@ namespace charivari_ltd::loggerpp
 			{constants::key_exception_message, std::string{t.what()}},
 		});
 	}
+
+	template <typename traits_t>
+	inline auto operator >> (const logger_base<traits_t>& ref, typename logger_base<traits_t>::dispatcher_t::consumer_fn&& consumer)
+	{
+		return ref.get_dispatcher()->subscribe(std::move(consumer));
+	}
+
 } //namespace charivari_ltd::loggerpp
 

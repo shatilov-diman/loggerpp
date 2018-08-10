@@ -50,8 +50,6 @@ namespace charivari_ltd::loggerpp
 		using consumer_fn = std::function<void (const tags_t& tags)>;
 		using exception_handler_t = utils::task_queue::exception_handler_t;
 
-		using consumer_ptr = std::shared_ptr<consumer_fn>;
-
 	public:
 		dispatcher() :
 			dispatcher([] (std::exception_ptr ptr) {

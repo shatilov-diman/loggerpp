@@ -70,7 +70,7 @@ int main () {
 
 	my_logger custom;
 
-	auto subscription = custom.get_dispatcher()->subscribe(loggerpp::default_consumer);
+	auto subscription = custom >> loggerpp::default_consumer;
 
 	custom.info("Hello, 69!", "world");
 

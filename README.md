@@ -36,7 +36,7 @@ int main () {
 
         logger simple;
 
-        auto subscription = simple.get_dispatcher()->subscribe(loggerpp::default_consumer);
+        auto subscription = simple >> loggerpp::default_consumer;
 
         simple.info("Hello, {}!", "world");
 
@@ -81,11 +81,11 @@ private:
 int main () {
 	logger root;
 
-	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
+	auto subscription = root >> [](const auto& tags) {
 		for (const auto& tag : tags)
 			std::cout << loggerpp::to_string(tag.key) << ":" << loggerpp::to_string(tag.value) << '\t';
 		std::cout << std::endl;
-	});
+	};
 
 	Application app(root);
 
@@ -140,9 +140,9 @@ private:
 			local.debug("Before extend");
 			{
 				//this subscribtion catch only 'extend message' message
-				auto subscription = local.get_dispatcher()->subscribe([name](const auto& tags) {
+				auto subscription = local >> [name](const auto& tags) {
 					std::cerr << name << ": " << loggerpp::get_message(tags) << std::endl;
-				});
+				};
 
 				loggerpp::extend_logger(local, { {"timer", std::chrono::system_clock::now()} })
 					.info("extend message");
@@ -161,11 +161,11 @@ private:
 int main () {
 	logger root;
 
-	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
+	auto subscription = root >> [](const auto& tags) {
 		for (const auto& tag : tags)
 			std::cout << loggerpp::to_string(tag.value) << '\t';
 		std::cout << std::endl;
-	});
+	};
 
 	Application app(root);
 
@@ -192,10 +192,10 @@ int main () {
 	std::size_t total_size = 0;
 	const auto start = std::chrono::system_clock::now();
 	{
-		auto counter_subscription = root.get_dispatcher()->subscribe([&total_size](const auto& tags) {
+		auto counter_subscription = root >> [&total_size](const auto& tags) {
 			for (const auto& tag : tags)
 				total_size += loggerpp::to_string(tag.value).size();
-		});
+		};
 
 		for (std::size_t index = 0; index < messages_count; ++index)
 			root.info("msg: {}", index);
@@ -206,11 +206,11 @@ int main () {
 	const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(delta);
 	const auto mills = std::chrono::duration_cast<std::chrono::milliseconds>(delta - seconds);
 
-	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
+	auto subscription = root >> [](const auto& tags) {
 		for (const auto& tag : tags)
 			std::cout << loggerpp::to_string(tag.value) << '\t';
 		std::cout << std::endl;
-	});
+	};
 
 	root.info("Total value size for {} messages is {}; calculated for {}.{}", messages_count, total_size, seconds.count(), mills.count());
 
@@ -260,7 +260,7 @@ int main () {
 
 	my_logger custom;
 
-	auto subscription = custom.get_dispatcher()->subscribe(loggerpp::default_consumer);
+	auto subscription = custom >> loggerpp::default_consumer;
 
 	custom.info("Hello, 69!", "world");
 
