@@ -34,7 +34,7 @@ Also you may extend tags by call extend_logger & extend_exception from any threa
 int main () {
         using namespace charivari_ltd;
 
-        logger simple(std::make_shared<logger::dispatcher_t>(), {});
+        logger simple;
 
         auto subscription = simple.get_dispatcher()->subscribe(loggerpp::default_consumer);
 
@@ -79,7 +79,7 @@ private:
 };
 
 int main () {
-	logger root(std::make_shared<logger::dispatcher_t>(), {});
+	logger root;
 
 	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
 		for (const auto& tag : tags)
@@ -159,7 +159,7 @@ private:
 };
 
 int main () {
-	logger root(std::make_shared<logger::dispatcher_t>(), {});
+	logger root;
 
 	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
 		for (const auto& tag : tags)
@@ -187,7 +187,7 @@ using namespace charivari_ltd;
 static const std::size_t messages_count = 1'000'000;
 
 int main () {
-	logger root(std::make_shared<logger::dispatcher_t>(), {});
+	logger root;
 
 	std::size_t total_size = 0;
 	const auto start = std::chrono::system_clock::now();
@@ -258,7 +258,7 @@ using my_logger = charivari_ltd::loggerpp::logger_base<my_log_traits>;
 int main () {
 	using namespace charivari_ltd;
 
-	my_logger custom(std::make_shared<logger::dispatcher_t>(), {});
+	my_logger custom;
 
 	auto subscription = custom.get_dispatcher()->subscribe(loggerpp::default_consumer);
 

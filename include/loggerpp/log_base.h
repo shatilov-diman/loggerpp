@@ -100,7 +100,9 @@ namespace charivari_ltd::loggerpp
 
 	public:
 
-		logger_base() = delete;
+		logger_base() :
+			logger_base(std::make_shared<dispatcher_t>(), {})
+		{}
 
 		logger_base(const dispatcher_ptr& disp, tags_t&& tags) :
 			disp(disp),

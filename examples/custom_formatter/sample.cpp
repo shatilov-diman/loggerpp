@@ -68,7 +68,7 @@ using my_logger = charivari_ltd::loggerpp::logger_base<my_log_traits>;
 int main () {
 	using namespace charivari_ltd;
 
-	my_logger custom(std::make_shared<logger::dispatcher_t>(), {});
+	my_logger custom;
 
 	auto subscription = custom.get_dispatcher()->subscribe(loggerpp::default_consumer);
 

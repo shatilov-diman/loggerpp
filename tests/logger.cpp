@@ -46,13 +46,13 @@ class logger_test_suite :
 
 TEST_F(logger_test_suite, empty)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	(void)root;
 }
 
 TEST_F(logger_test_suite, add_remove_subscription)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription = root.get_dispatcher()->subscribe([] (const auto& tags) {
 		});
@@ -62,14 +62,14 @@ TEST_F(logger_test_suite, add_remove_subscription)
 
 TEST_F(logger_test_suite, log_without_consumer)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	root.debug("Test");
 }
 
 TEST_F(logger_test_suite, log_messages_with_consumer)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	root.debug("1");
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
@@ -87,7 +87,7 @@ TEST_F(logger_test_suite, log_two_consumers)
 {
 	std::vector<std::string> check1;
 	std::vector<std::string> check2;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription1 = root.get_dispatcher()->subscribe([&check1] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -113,7 +113,7 @@ TEST_F(logger_test_suite, log_two_consumers)
 
 TEST_F(logger_test_suite, check_extend_tags)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});
@@ -137,7 +137,7 @@ TEST_F(logger_test_suite, check_extend_tags)
 
 TEST_F(logger_test_suite, check_extend_exception)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});
@@ -163,7 +163,7 @@ TEST_F(logger_test_suite, check_extend_exception)
 TEST_F(logger_test_suite, check_formatter_no_placeholder)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -178,7 +178,7 @@ TEST_F(logger_test_suite, check_formatter_no_placeholder)
 TEST_F(logger_test_suite, check_formatter_no_arg)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -193,7 +193,7 @@ TEST_F(logger_test_suite, check_formatter_no_arg)
 TEST_F(logger_test_suite, check_formatter)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -208,7 +208,7 @@ TEST_F(logger_test_suite, check_formatter)
 TEST_F(logger_test_suite, check_formatter_ex)
 {
 	std::vector<std::string> check;
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	{
 		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -222,7 +222,7 @@ TEST_F(logger_test_suite, check_formatter_ex)
 
 TEST_F(logger_test_suite, check_default_consumer)
 {
-	logger root{std::make_shared<dispatcher>(), {}};
+	logger root;
 	auto x = extend_logger(root, logger::tags_t {
 		{"aaa", std::wstring{L"BBB"}},
 	});

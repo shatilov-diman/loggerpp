@@ -38,7 +38,7 @@
 int main () {
 	using namespace charivari_ltd;
 
-	logger simple(std::make_shared<logger::dispatcher_t>(), {});
+	logger simple;
 
 	auto subscription = simple.get_dispatcher()->subscribe(loggerpp::default_consumer);
 

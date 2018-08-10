@@ -40,7 +40,7 @@ using namespace charivari_ltd;
 static const std::size_t messages_count = 1'000'000;
 
 int main () {
-	logger root(std::make_shared<logger::dispatcher_t>(), {});
+	logger root;
 
 	std::size_t total_size = 0;
 	const auto start = std::chrono::system_clock::now();

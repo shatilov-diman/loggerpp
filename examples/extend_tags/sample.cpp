@@ -62,7 +62,7 @@ private:
 };
 
 int main () {
-	logger root(std::make_shared<logger::dispatcher_t>(), {});
+	logger root;
 
 	auto subscription = root.get_dispatcher()->subscribe([](const auto& tags) {
 		for (const auto& tag : tags)
