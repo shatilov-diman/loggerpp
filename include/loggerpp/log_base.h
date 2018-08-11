@@ -70,6 +70,7 @@ namespace charivari_ltd::loggerpp
 
 		using key_t = typename traits_t::key_t;
 		using value_t =  typename traits_t::value_t;
+		using tag_t = typename traits_t::tag_t;
 		using tags_t = typename traits_t::tags_t;
 		using formatter_t = typename traits_t::formatter_t;
 

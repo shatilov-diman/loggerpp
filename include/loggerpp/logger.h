@@ -50,13 +50,13 @@ namespace loggerpp
 		using key_t = std::variant<std::string, std::wstring>;
 		using value_t = std::variant<nullptr_t, bool, char, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
 
-		struct item_t
+		struct tag_t
 		{
 			key_t key;
 			value_t value;
 		};
 
-		using tags_t = std::deque<item_t>;
+		using tags_t = std::deque<tag_t>;
 
 		static inline tags_t extend_back(tags_t&& tags, tags_t&& t)
 		{
