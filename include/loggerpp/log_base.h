@@ -215,5 +215,23 @@ namespace charivari_ltd::loggerpp
 		return ref.get_dispatcher()->subscribe(std::move(consumer));
 	}
 
+	template <typename traits_t>
+	inline auto operator | (const logger_base<traits_t>& ref, typename traits_t::tag_t&& tag)
+	{
+		typename traits_t::tags_t tags{std::move(tag)};
+		return extend_logger(ref, std::move(tags));
+	}
+
+	template <typename traits_t>
+	inline auto operator | (const logger_base<traits_t>& ref, typename traits_t::tags_t&& tags)
+	{
+		return extend_logger(ref, std::move(tags));
+	}
+
+	template <typename traits_t, typename exception_t>
+	inline auto operator | (const logger_base<traits_t>& ref, const exception_t& t)
+	{
+		return extend_exception(ref, t);
+	}
 } //namespace charivari_ltd::loggerpp
 

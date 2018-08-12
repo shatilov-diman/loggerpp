@@ -44,10 +44,10 @@ public:
 	Application() = delete;
 
 	explicit Application(const logger& root) :
-		app_logger(loggerpp::extend_logger(root, {
+		app_logger(root | logger::tags_t {
 			{"entity", std::string{"Application"}},
 			{"instance", reinterpret_cast<std::uint64_t>(this)}
-		}))
+		})
 	{
 		app_logger.debug("Application constructed");
 	}

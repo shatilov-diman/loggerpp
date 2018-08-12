@@ -61,7 +61,7 @@ public:
 	Application() = delete;
 
 	explicit Application(const logger& root) :
-		app_logger(loggerpp::extend_logger(root, {
+		app_logger(root | logger::tags_t {
 			{"entity", std::string{"Application"}},
 			{"instance", reinterpret_cast<std::uint64_t>(this)}
 		}))
@@ -114,7 +114,7 @@ public:
 
 	explicit Application(const logger& root) :
 		stop {false},
-		app_logger(loggerpp::extend_logger(root, {
+		app_logger(root | logger::tags_t {
 			{"entity", std::string{"Application"}}
 		})),
 		thread1([this] { this->run("x1"); }),
@@ -136,7 +136,7 @@ private:
 	{
 		while (stop == false)
 		{
-			auto local = loggerpp::extend_logger(app_logger, { {"name", name} });
+			auto local = app_logger | logger::tag_t {"name", name};
 			local.debug("Before extend");
 			{
 				//this subscribtion catch only 'extend message' message
@@ -144,7 +144,7 @@ private:
 					std::cerr << name << ": " << loggerpp::get_message(tags) << std::endl;
 				};
 
-				loggerpp::extend_logger(local, { {"timer", std::chrono::system_clock::now()} })
+				(local | logger::tag_t {"timer", std::chrono::system_clock::now()})
 					.info("extend message");
 			}
 			local.debug("After extend");

@@ -143,6 +143,28 @@ TEST_F(logger_test_suite, check_extend_tags)
 	//EXPECT_EQ(std::get<std::wstring>(*get_tag(check[0], "aaa")), L"BBB");
 }
 
+TEST_F(logger_test_suite, check_extend_tags_by_pipe_operator)
+{
+	logger root;
+	auto x = root | logger::tags_t {
+		{"aaa", std::wstring{L"BBB"}},
+	};
+
+	std::vector<logger::tags_t> check;
+	{
+		auto subscription = root >> [&check] (const auto& tags) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			check.push_back(tags);
+		};
+
+		x.debug("test");
+	}
+
+	EXPECT_EQ(check.size(), 1);
+	EXPECT_EQ(get_message(check[0]), "test");
+	EXPECT_EQ(get_level(check[0]), loggerpp::level::debug);
+}
+
 TEST_F(logger_test_suite, check_extend_exception)
 {
 	logger root;
@@ -166,6 +188,29 @@ TEST_F(logger_test_suite, check_extend_exception)
 	EXPECT_EQ(get_level(check[0]), loggerpp::level::error);
 	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_type), std::string{"St13runtime_error"});
 	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_message), std::string{"AAAA"});
+}
+
+TEST_F(logger_test_suite, check_extend_exception_by_pipe_operator)
+{
+	logger root;
+	auto x = root | logger::tags_t {
+		{"aaa", std::wstring{L"BBB"}},
+	};
+
+	std::vector<logger::tags_t> check;
+	{
+		auto subscription = root >> [&check] (const auto& tags) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			check.push_back(tags);
+		};
+
+		(x | std::runtime_error("AAAA"))
+			.error("fail");
+	}
+
+	EXPECT_EQ(check.size(), 1);
+	EXPECT_EQ(get_message(check[0]), "fail");
+	EXPECT_EQ(get_level(check[0]), loggerpp::level::error);
 }
 
 TEST_F(logger_test_suite, check_formatter_no_placeholder)
