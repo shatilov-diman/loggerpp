@@ -106,7 +106,7 @@ namespace loggerpp
 	inline std::wstring get_wmessage(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::wstring>(tags[constants::index_message].second);
+		return std::get<std::wstring>(tags[constants::index_message].value);
 	}
 
 	template<typename tags_t, typename key_t, typename value_t>
