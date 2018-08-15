@@ -162,13 +162,19 @@ namespace loggerpp
 		}, value);
 	}
 
-	inline void default_consumer(const default_log_traits::tags_handle_t& tags_handle)
+	template <typename traits_t>
+	inline void base_default_consumer(const typename traits_t::tags_handle_t& tags_handle)
 	{
-		const auto& tags = default_log_traits::extract_tags(tags_handle);
+		const auto& tags = traits_t::extract_tags(tags_handle);
 		std::cout
 			<< utils::to_string(get_time(tags)) << '\t'
 			<< utils::to_string(get_level(tags)) << '\t'
 			<< get_message(tags) << std::endl;
+	}
+
+	inline void default_consumer(const default_log_traits::tags_handle_t& tags_handle)
+	{
+		base_default_consumer<default_log_traits>(tags_handle);
 	}
 } //namespace loggerpp
 
