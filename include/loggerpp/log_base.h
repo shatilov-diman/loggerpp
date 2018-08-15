@@ -72,9 +72,10 @@ namespace charivari_ltd::loggerpp
 		using value_t =  typename traits_t::value_t;
 		using tag_t = typename traits_t::tag_t;
 		using tags_t = typename traits_t::tags_t;
+		using tags_handle_t = typename traits_t::tags_handle_t;
 		using formatter_t = typename traits_t::formatter_t;
 
-		using dispatcher_t = dispatcher<tags_t>;
+		using dispatcher_t = dispatcher<tags_handle_t>;
 		using dispatcher_ptr = std::shared_ptr<dispatcher_t>;
 
 	public:
@@ -126,11 +127,12 @@ namespace charivari_ltd::loggerpp
 		void log(const level& lvl, string_t&& format, args_t&& ... args) const
 		{
 			auto&& message = formatter_t::format(std::move(format), std::forward<args_t>(args)...);
-			disp->push(extend_front(tags, {
+			auto&& t = extend_front(tags, {
 				{constants::key_message, message},
 				{constants::key_level, lvl},
 				{constants::key_time, std::chrono::system_clock::now()},
-			}));
+			});
+			disp->push(traits_t::make_tags_handle(std::move(t)));
 		}
 
 		template <typename ... args_t>

@@ -57,6 +57,7 @@ namespace loggerpp
 		};
 
 		using tags_t = std::deque<tag_t>;
+		using tags_handle_t = tags_t;
 
 		static inline tags_t extend_back(tags_t&& tags, tags_t&& t)
 		{
@@ -69,6 +70,16 @@ namespace loggerpp
 		{
 			for (auto&& item : t)
 				tags.push_front(std::move(item));
+			return tags;
+		}
+
+		static inline tags_handle_t make_tags_handle(tags_t&& tags)
+		{
+			return std::move(tags);
+		}
+
+		static inline const tags_t& extract_tags(const tags_handle_t& tags)
+		{
 			return tags;
 		}
 	};
@@ -151,8 +162,9 @@ namespace loggerpp
 		}, value);
 	}
 
-	inline void default_consumer(const default_log_traits::tags_t& tags)
+	inline void default_consumer(const default_log_traits::tags_handle_t& tags_handle)
 	{
+		const auto& tags = default_log_traits::extract_tags(tags_handle);
 		std::cout
 			<< utils::to_string(get_time(tags)) << '\t'
 			<< utils::to_string(get_level(tags)) << '\t'

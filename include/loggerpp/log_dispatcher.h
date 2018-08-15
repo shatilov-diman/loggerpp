@@ -42,12 +42,12 @@
 
 namespace charivari_ltd::loggerpp
 {
-	template <typename tags_t>
+	template <typename tags_handle_t>
 	class dispatcher :
 		public utils::noncopyable
 	{
 	public:
-		using consumer_fn = std::function<void (const tags_t& tags)>;
+		using consumer_fn = std::function<void (const tags_handle_t& tags)>;
 		using exception_handler_t = utils::task_queue::exception_handler_t;
 
 	public:
@@ -77,7 +77,7 @@ namespace charivari_ltd::loggerpp
 			return ptr;
 		}
 
-		void push(tags_t&& tags)
+		void push(tags_handle_t&& tags)
 		{
 			queue.push([this, tags{std::move(tags)}] {
 				dispatch(tags);
@@ -97,7 +97,7 @@ namespace charivari_ltd::loggerpp
 		}
 
 	private:
-		void dispatch(const tags_t& tags)
+		void dispatch(const tags_handle_t& tags)
 		{
 			for (auto& c : consumers)
 			{
