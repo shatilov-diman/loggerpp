@@ -268,3 +268,41 @@ int main () {
 }
 ```
 
+## run_own_thread example
+
+```cpp
+#include <loggerpp/shared_tags_logger.h> //using special header for special logger
+
+#include <memory>
+
+int main () {
+	using namespace charivari_ltd;
+
+	shared_tags_logger logger; //using special logger
+
+	std::vector <std::size_t> check;
+
+	{
+		auto subscription0 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			check.push_back(0);
+		});
+		logger.info("Hello, {}!", "world");
+	}//waiting here while thread is finishing because subscription0 is destructing
+
+	{
+		auto subscription1 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			check.push_back(2);
+		});
+		auto subscription2 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			check.push_back(1);
+		});
+		logger.info("Hello, {}!", "world");
+	}//waiting here while threads is finishing because subscription1,2 are destructing
+
+	std::cout << check[0] << check[1] << check[2] << std::endl;//Output:012
+
+	return 0;
+}
+```

@@ -91,3 +91,81 @@ TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_consumer)
 	EXPECT_EQ(check1[0], check2[0]);
 }
 
+TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_own_thread_consumer)
+{
+	std::vector<shared_tags_logger::traits_t::tags_handle_t> check1;
+	std::vector<shared_tags_logger::traits_t::tags_handle_t> check2;
+
+	shared_tags_logger root;
+	root.debug("1");
+	{
+		auto subscription1 = root >> loggerpp::run_own_thread([&check1] (const auto& tags_handle) {
+			check1.push_back(tags_handle);
+		});
+		auto subscription2 = root >> loggerpp::run_own_thread([&check2] (const auto& tags_handle) {
+			check2.push_back(tags_handle);
+		});
+		root.debug("2");
+	}
+	root.debug("3");
+
+	EXPECT_EQ(check1.size(), 1);
+	EXPECT_EQ(get_message(check1[0]), "2");
+
+	EXPECT_EQ(check2.size(), 1);
+	EXPECT_EQ(get_message(check2[0]), "2");
+
+	EXPECT_EQ(check1[0], check2[0]);
+}
+
+TEST_F(shared_tags_logger_test_suite, check_order_of_own_threads)
+{
+	std::vector<std::size_t> check;
+
+	shared_tags_logger root;
+	root.debug("1");
+	{
+		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			check.push_back(1);
+		});
+		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			check.push_back(2);
+		});
+		root.debug("2");
+	}
+	root.debug("3");
+
+	EXPECT_EQ(check.size(), 2);
+	EXPECT_EQ(check[0], 2);
+	EXPECT_EQ(check[1], 1);
+}
+
+
+TEST_F(shared_tags_logger_test_suite, check_order_on_destruct_own_threads)
+{
+	std::vector<std::size_t> check;
+
+	shared_tags_logger root;
+	root.debug("0");
+	{
+		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			check.push_back(1);
+		});
+		root.debug("5");
+	}//wait while thread is finishing
+
+	{
+		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+			check.push_back(2);
+		});
+		root.debug("5");
+	}//wait while thread is finishing
+	root.debug("3");
+
+	EXPECT_EQ(check.size(), 2);
+	EXPECT_EQ(check[0], 1);
+	EXPECT_EQ(check[1], 2);
+}
+

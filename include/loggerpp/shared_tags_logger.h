@@ -34,6 +34,7 @@
 #pragma once
 
 #include "logger.h"
+#include "../utils/task_queue.h"
 
 namespace charivari_ltd
 {
@@ -92,6 +93,17 @@ namespace loggerpp
 	inline void shared_tags_default_consumer(const shared_tags_log_traits::tags_handle_t& tags_handle)
 	{
 		base_default_consumer<shared_tags_log_traits>(tags_handle);
+	}
+
+	template <typename consumer_t>
+	inline auto run_own_thread(consumer_t&& consumer)
+	{
+		auto queue = std::make_shared<utils::task_queue>();
+		return [queue, consumer{std::move(consumer)}] (const auto& tags_handle) {
+			queue->push([&consumer, tags_handle] {
+				consumer(tags_handle);
+			});
+		};
 	}
 } //namespace loggerpp
 
