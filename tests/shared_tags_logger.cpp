@@ -196,3 +196,29 @@ TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_own_thread_c
 	EXPECT_EQ(check1[0], check2[0]);
 }
 
+//It's slow to copy tags to separate threads, but it works
+TEST_F(shared_tags_logger_test_suite, check_logger_with_own_thread_consumer_with_operator)
+{
+	std::vector<logger::traits_t::tags_t> check1;
+	std::vector<logger::traits_t::tags_t> check2;
+
+	logger root;
+	root.debug("1");
+	{
+		auto subscription1 = root >> loggerpp::run_own_thread() >> [&check1] (const auto& tags_handle) {
+			check1.push_back(logger::traits_t::extract_tags(tags_handle));
+		};
+		auto subscription2 = root >> loggerpp::run_own_thread() >> [&check2] (const auto& tags) { //for default_logger_traits tags_t and tags_handler_t is the same
+			check2.push_back(tags);
+		};
+		root.debug("2");
+	}
+	root.debug("3");
+
+	EXPECT_EQ(check1.size(), 1);
+	EXPECT_EQ(get_message(check1[0]), "2");
+
+	EXPECT_EQ(check2.size(), 1);
+	EXPECT_EQ(get_message(check2[0]), "2");
+}
+
