@@ -105,6 +105,34 @@ namespace loggerpp
 			});
 		};
 	}
+
+	namespace details
+	{
+		struct forward_to_thread {};
+
+		template <typename logger_t>
+		struct forward_logger_to_thread
+		{
+			const logger_t& ref;
+		};
+	}//namespace details
+
+	inline details::forward_to_thread run_own_thread()
+	{
+		return {};
+	}
+
+	template <typename traits_t>
+	inline auto operator >> (const logger_base<traits_t>& ref, const details::forward_to_thread&)
+	{
+		return details::forward_logger_to_thread<logger_base<traits_t>>{ref};
+	}
+
+	template <typename logger_t, typename consumer_t>
+	inline auto operator >> (const details::forward_logger_to_thread<logger_t>& ref, consumer_t&& consumer)
+	{
+		return ref.ref >> run_own_thread(std::move(consumer));
+	}
 } //namespace loggerpp
 
 	using shared_tags_logger = loggerpp::logger_base<loggerpp::shared_tags_log_traits>;

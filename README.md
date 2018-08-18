@@ -295,9 +295,9 @@ int main () {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 			check.push_back(2);
 		});
-		auto subscription2 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+		auto subscription2 = logger >> loggerpp::run_own_thread() >> [&check] (const auto& tags_handle) {
 			check.push_back(1);
-		});
+		};
 		logger.info("Hello, {}!", "world");
 	}//waiting here while threads is finishing because subscription1,2 are destructing
 
