@@ -270,6 +270,22 @@ int main () {
 
 ## run_own_thread example
 
+Logger is asynchron by default, in another words logger::info(and other) method is not block the thread.
+
+All log consumers are executed in a separate thread.
+
+From time to time it's required a lot of time to process some consumers(restore db connection for example)
+
+and it blocks all the other consumers.
+
+For solve this issue you can wrap your logs consumer with loggerpp::run_own_thread function which holds
+
+separate thread and will copy all tags for you.
+
+Because copying tags is a slow operation, we recomends using shared_tags_logger.
+
+It just wrap original tags with shared_ptr.
+
 ```cpp
 #include <loggerpp/shared_tags_logger.h> //using special header for special logger
 
@@ -309,7 +325,7 @@ int main () {
 	//0 Hello, worlds!
 	//1 Hello, worlds!
 	//2 Hello, worlds!
-	//
+	//012
 
 	return 0;
 }

@@ -69,7 +69,7 @@ int main () {
 	//0 Hello, worlds!
 	//1 Hello, worlds!
 	//2 Hello, worlds!
-	//
+	//012
 
 	return 0;
 }
