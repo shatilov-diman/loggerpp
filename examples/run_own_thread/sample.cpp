@@ -45,6 +45,7 @@ int main () {
 	{
 		auto subscription0 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::cout << "0: " << loggerpp::get_message(tags_handle) << std::endl;
 			check.push_back(0);
 		});
 		logger.info("Hello, {}!", "world");
@@ -53,15 +54,22 @@ int main () {
 	{
 		auto subscription1 = logger >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::cout << "2: " << loggerpp::get_message(tags_handle) << std::endl;
 			check.push_back(2);
 		});
 		auto subscription2 = logger >> loggerpp::run_own_thread() >> [&check] (const auto& tags_handle) {
+			std::cout << "1: " << loggerpp::get_message(tags_handle) << std::endl;
 			check.push_back(1);
 		};
 		logger.info("Hello, {}!", "world");
 	}//waiting here while threads is finishing because subscription1,2 are destructing
 
-	std::cout << check[0] << check[1] << check[2] << std::endl;//output:012
+	std::cout << check[0] << check[1] << check[2] << std::endl;
+	//Output:
+	//0 Hello, worlds!
+	//1 Hello, worlds!
+	//2 Hello, worlds!
+	//
 
 	return 0;
 }
