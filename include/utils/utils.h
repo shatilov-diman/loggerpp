@@ -34,12 +34,19 @@
 #pragma once
 
 #include <exception>
+#include <codecvt>
+#include <locale>
 #include <string>
-#include <future>
-#include <thread>
+#include <chrono>
 
 namespace charivari_ltd::utils
 {
+	namespace details
+	{
+		static const std::string null_str{"(null)"};
+		static const std::wstring null_wstr{L"(null)"};
+	}//namespace details
+
 	template <typename type_ptr>
 	static type_ptr move_nonnullptr_or_die(type_ptr&& ptr)
 	{
@@ -59,10 +66,16 @@ namespace charivari_ltd::utils
 	}
 	inline std::string to_string(const std::nullptr_t&)
 	{
-		return "(null)";
+		return details::null_str;
+	}
+	inline std::string to_string(const bool& val)
+	{
+		return val ? "true" : "false";
 	}
 	inline std::string to_string(const char* arg)
 	{
+		if (arg == nullptr)
+			return details::null_str;
 		return arg;
 	}
 	inline const std::string& to_string(const std::string& arg)
@@ -71,7 +84,14 @@ namespace charivari_ltd::utils
 	}
 	inline std::string to_string(const std::wstring& arg)
 	{
-		return "";
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		return converter.to_bytes(arg);
+	}
+	inline std::string to_string(const wchar_t* arg)
+	{
+		if (arg == nullptr)
+			return details::null_str;
+		return to_string(std::wstring(arg));
 	}
 
 	template <typename arg_t>
@@ -85,10 +105,16 @@ namespace charivari_ltd::utils
 	}
 	inline std::wstring to_wstring(const std::nullptr_t&)
 	{
-		return L"(null)";
+		return details::null_wstr;
 	}
-	inline std::wstring to_string(const wchar_t* arg)
+	inline std::wstring to_wstring(const bool& val)
 	{
+		return val ? L"true" : L"false";
+	}
+	inline std::wstring to_wstring(const wchar_t* arg)
+	{
+		if (arg == nullptr)
+			return details::null_wstr;
 		return arg;
 	}
 	inline const std::wstring& to_wstring(const std::wstring& arg)
@@ -97,7 +123,14 @@ namespace charivari_ltd::utils
 	}
 	inline std::wstring to_wstring(const std::string& arg)
 	{
-		return L"";
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+		return converter.from_bytes(arg);
+	}
+	inline std::wstring to_wstring(const char* arg)
+	{
+		if (arg == nullptr)
+			return details::null_wstr;
+		return to_wstring(std::string(arg));
 	}
 } //namespace charivari_ltd::utils
 
