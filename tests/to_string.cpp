@@ -60,6 +60,15 @@ TEST_F(to_string_test_suite, check_bool)
 	EXPECT_EQ(L"true", utils::to_wstring(true));
 }
 
+TEST_F(to_string_test_suite, check_bool_t)
+{
+	EXPECT_EQ("false", utils::to_string(utils::false_t));
+	EXPECT_EQ("true", utils::to_string(utils::true_t));
+
+	EXPECT_EQ(L"false", utils::to_wstring(utils::false_t));
+	EXPECT_EQ(L"true", utils::to_wstring(utils::true_t));
+}
+
 TEST_F(to_string_test_suite, check_char)
 {
 	EXPECT_EQ("97", utils::to_string('a'));

@@ -8,6 +8,7 @@ conan_basic_setup()
 
 add_executable(tests
 	./tests/main.cpp
+	./tests/bool_t.cpp
 	./tests/logger.cpp
 	./tests/worker.cpp
 	./tests/to_string.cpp

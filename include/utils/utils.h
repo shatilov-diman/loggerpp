@@ -33,6 +33,8 @@
 
 #pragma once
 
+#include "bool_t.h"
+
 #include <exception>
 #include <codecvt>
 #include <locale>
@@ -72,6 +74,10 @@ namespace charivari_ltd::utils
 	{
 		return val ? "true" : "false";
 	}
+	inline std::string to_string(const bool_t& val)
+	{
+		return to_string(static_cast<bool>(val));
+	}
 	inline std::string to_string(const char* arg)
 	{
 		if (arg == nullptr)
@@ -110,6 +116,10 @@ namespace charivari_ltd::utils
 	inline std::wstring to_wstring(const bool& val)
 	{
 		return val ? L"true" : L"false";
+	}
+	inline std::wstring to_wstring(const bool_t& val)
+	{
+		return to_wstring(static_cast<bool>(val));
 	}
 	inline std::wstring to_wstring(const wchar_t* arg)
 	{
