@@ -121,23 +121,6 @@ namespace loggerpp
 		return std::get<std::wstring>(tags[constants::index_message].value);
 	}
 
-	template<typename tags_t, typename key_t, typename value_t>
-	inline std::optional<value_t> get_tag(const tags_t& tags, const key_t& key)
-	{
-		for (const auto& t : tags)
-			if (t.key == key)
-				return t.value;
-		return {};
-	}
-
-	template<typename type_t, typename tags_t,  typename key_t>
-	inline std::optional<type_t> get_tag(const tags_t& tags, const key_t& key)
-	{
-		if (auto opt = get_tag(tags, key))
-			return { std::get<type_t>(*opt) };
-		return {};
-	}
-
 	inline std::string to_string(const default_log_traits::key_t& key)
 	{
 		return std::visit([] (const auto& value) {
@@ -161,6 +144,38 @@ namespace loggerpp
 		return std::visit([] (const auto& value) {
 			return utils::to_wstring(value);
 		}, value);
+	}
+
+	template<typename tags_t>
+	inline auto get_vtag(const tags_t& tags, const std::string& key)
+	{
+		for (const auto& t : tags)
+			if (to_string(t.key) == key)
+				return std::optional<decltype(t.value)>{t.value};
+		return std::optional<decltype(tags.begin()->value)>{};
+	}
+	template<typename tags_t>
+	inline auto get_vtag(const tags_t& tags, const std::wstring& key)
+	{
+		for (const auto& t : tags)
+			if (to_wstring(t.key) == key)
+				return std::optional<decltype(t.value)>{t.value};
+		return std::optional<decltype(tags.begin()->value)>{};
+	}
+
+	template<typename type_t, typename tags_t>
+	inline std::optional<type_t> get_tag(const tags_t& tags, const std::string& key)
+	{
+		if (auto t = get_vtag<tags_t>(tags, key))
+			return std::get<type_t>(*t);
+		return std::optional<type_t>{};
+	}
+	template<typename type_t, typename tags_t>
+	inline std::optional<type_t> get_tag(const tags_t& tags, const std::wstring& key)
+	{
+		if (auto t = get_vtag<tags_t>(tags, key))
+			return std::get<type_t>(*t);
+		return std::optional<type_t>{};
 	}
 
 	template <typename traits_t>

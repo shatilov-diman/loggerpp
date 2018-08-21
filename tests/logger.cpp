@@ -139,8 +139,6 @@ TEST_F(logger_test_suite, check_extend_tags)
 	EXPECT_EQ(check.size(), 1);
 	EXPECT_EQ(get_message(check[0]), "test");
 	EXPECT_EQ(get_level(check[0]), loggerpp::level::debug);
-	//EXPECT_EQ(get_tag<std::wstring>(check[0], "aaa"), L"BBB");
-	//EXPECT_EQ(std::get<std::wstring>(*get_tag(check[0], "aaa")), L"BBB");
 }
 
 TEST_F(logger_test_suite, check_extend_tags_by_pipe_operator)
@@ -186,8 +184,6 @@ TEST_F(logger_test_suite, check_extend_exception)
 	EXPECT_EQ(check.size(), 1);
 	EXPECT_EQ(get_message(check[0]), "fail");
 	EXPECT_EQ(get_level(check[0]), loggerpp::level::error);
-	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_type), std::string{"St13runtime_error"});
-	//EXPECT_EQ(get_tag<std::string>(check[0], constants::key_exception_message), std::string{"AAAA"});
 }
 
 TEST_F(logger_test_suite, check_extend_exception_by_pipe_operator)
@@ -289,3 +285,46 @@ TEST_F(logger_test_suite, check_default_consumer)
 
 }
 
+TEST_F(logger_test_suite, check_not_found_tag)
+{
+	auto tags = logger::tags_t {
+		{"2", 100UL},
+	};
+	EXPECT_EQ(loggerpp::get_vtag(tags, "999").has_value(), false);
+	EXPECT_EQ(loggerpp::get_tag<double>(tags, "999").has_value(), false);
+}
+
+TEST_F(logger_test_suite, check_incorrect_tag_type)
+{
+	auto tags = logger::tags_t {
+		{"2", 100UL},
+	};
+	EXPECT_EQ(loggerpp::get_vtag(tags, "2").has_value(), true);
+	EXPECT_EQ(loggerpp::get_tag<std::uint64_t>(tags, "2"), 100UL);
+	EXPECT_THROW(loggerpp::get_tag<std::int64_t>(tags, "2"), std::exception);
+}
+
+TEST_F(logger_test_suite, check_types_in_tags)
+{
+	auto tags = logger::tags_t {
+		{"0", nullptr},
+		{"1", utils::bool_t{true}},
+		{"2", 100UL},
+		{"3", -200L},
+		{"4", -2.0},
+		{"5", std::string("A")},
+		{"6", std::wstring(L"B")},
+		{"7", loggerpp::level::debug},
+		{"8", std::chrono::system_clock::time_point{std::chrono::system_clock::duration{777}}},
+	};
+
+	EXPECT_EQ(loggerpp::get_tag<std::nullptr_t>(tags, "0").value(), nullptr);
+	EXPECT_EQ(loggerpp::get_tag<utils::bool_t>(tags, "1").value(), true);
+	EXPECT_EQ(loggerpp::get_tag<std::uint64_t>(tags, "2").value(), 100UL);
+	EXPECT_EQ(loggerpp::get_tag<std::int64_t>(tags, "3").value(), -200L);
+	EXPECT_EQ(loggerpp::get_tag<double>(tags, "4").value(), -2.0);
+	EXPECT_EQ(loggerpp::get_tag<std::string>(tags, "5").value(), "A");
+	EXPECT_EQ(loggerpp::get_tag<std::wstring>(tags, "6").value(), L"B");
+	EXPECT_EQ(loggerpp::get_tag<loggerpp::level>(tags, "7").value(), loggerpp::level::debug);
+	EXPECT_EQ(loggerpp::get_tag<std::chrono::system_clock::time_point>(tags, "8").value(), std::chrono::system_clock::time_point{std::chrono::system_clock::duration{777}});
+}
