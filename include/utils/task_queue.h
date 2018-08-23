@@ -37,8 +37,10 @@
 #include "worker.h"
 #include "utils.h"
 
+#include <condition_variable>
 #include <functional>
 #include <atomic>
+#include <mutex>
 
 namespace charivari_ltd::utils
 {
@@ -67,12 +69,26 @@ namespace charivari_ltd::utils
 		void push(task_t&& cb)
 		{
 			queue.push(std::move(cb));
+			wake_up();
 		}
 
 	private:
 		void stop()
 		{
 			stop_requested = true;
+			wake_up();
+		}
+
+		void wake_up()
+		{
+			signaler.notify_all();
+		}
+
+		void wait()
+		{
+			std::unique_lock<std::mutex> guard(mutex);
+			if (stop_requested == false)
+				signaler.wait(guard);
 		}
 
 		void run() noexcept
@@ -80,7 +96,7 @@ namespace charivari_ltd::utils
 			while (stop_requested == false)
 			{
 				execute_all();
-				std::this_thread::yield();
+				wait();
 			}
 			execute_all();
 		}
@@ -102,6 +118,10 @@ namespace charivari_ltd::utils
 
 	private:
 		std::atomic_bool stop_requested;
+
+		std::mutex mutex;
+		std::condition_variable signaler;
+
 		exception_handler_t exception_handler;
 		lock_free::ordered_queue<task_t> queue;
 		worker work;
