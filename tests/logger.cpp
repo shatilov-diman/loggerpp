@@ -287,8 +287,8 @@ TEST_F(logger_test_suite, check_default_consumer)
 
 TEST_F(logger_test_suite, check_not_found_tag)
 {
-	auto tags = logger::tags_t {
-		{"2", 100UL},
+	logger::tags_t tags {
+		{"2", std::uint64_t{100UL}},
 	};
 	EXPECT_EQ(loggerpp::get_vtag(tags, "999").has_value(), false);
 	EXPECT_EQ(loggerpp::get_tag<double>(tags, "999").has_value(), false);
@@ -296,8 +296,8 @@ TEST_F(logger_test_suite, check_not_found_tag)
 
 TEST_F(logger_test_suite, check_incorrect_tag_type)
 {
-	auto tags = logger::tags_t {
-		{"2", 100UL},
+	logger::tags_t tags {
+		{"2", std::uint64_t{100UL}},
 	};
 	EXPECT_EQ(loggerpp::get_vtag(tags, "2").has_value(), true);
 	EXPECT_EQ(loggerpp::get_tag<std::uint64_t>(tags, "2"), 100UL);
@@ -306,11 +306,11 @@ TEST_F(logger_test_suite, check_incorrect_tag_type)
 
 TEST_F(logger_test_suite, check_types_in_tags)
 {
-	auto tags = logger::tags_t {
+	logger::tags_t tags {
 		{"0", nullptr},
 		{"1", utils::bool_t{true}},
-		{"2", 100UL},
-		{"3", -200L},
+		{"2", std::uint64_t{100UL}},
+		{"3", std::int64_t{-200L}},
 		{"4", -2.0},
 		{"5", std::string("A")},
 		{"6", std::wstring(L"B")},
