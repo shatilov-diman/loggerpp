@@ -1,6 +1,6 @@
 # loggerpp
 
-It's a framework for manage log messages.
+It's a framework for manage log messages. C++17 and above
 
 ## Notes
 
@@ -20,7 +20,9 @@ You are allowed to call any methods from any threads while logger object is aliv
 
 Even if you try to add log messages from consumer's thread. But it's not a good idea due to recurtion.
 
-You may subscribe and and unsubscribe to dispatcher from any threads.
+You may subscribe and unsubscribe to dispatcher from any threads.
+
+But unsubscribe method block current thread will blocked while all previous messages are passed to all consumers.
 
 Also you may extend tags by call extend_logger & extend_exception from any threads.
 
