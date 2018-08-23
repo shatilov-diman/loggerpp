@@ -14,6 +14,7 @@ add_executable(tests
 	./tests/to_string.cpp
 	./tests/task_queue.cpp
 	./tests/ordered_queue.cpp
+	./tests/file_log_consumer.cpp
 	./tests/shared_tags_logger.cpp
 )
 target_include_directories(tests PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")

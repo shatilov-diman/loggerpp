@@ -83,6 +83,25 @@ namespace loggerpp
 		{
 			return tags;
 		}
+
+		static inline auto begin_guaratee_tag(const tags_t& tags)
+		{
+			return tags.begin();
+		}
+		static inline auto end_guaratee_tag(const tags_t& tags)
+		{
+			const auto index = std::min(constants::index_guaratee_size, tags.size());
+			return tags.begin() + index;
+		}
+		static inline auto begin_unguaratee_tag(const tags_t& tags)
+		{
+			const auto index = std::min(constants::index_guaratee_size, tags.size());
+			return tags.begin() + index;
+		}
+		static inline auto end_unguaratee_tag(const tags_t& tags)
+		{
+			return tags.end();
+		}
 	};
 
 
