@@ -52,6 +52,14 @@ TEST_F(ordered_queue_test_suite, empty)
 	EXPECT_TRUE(queue.empty());
 }
 
+TEST_F(ordered_queue_test_suite, clear_empty)
+{
+	ordered_queue<int> queue;
+	EXPECT_TRUE(queue.empty());
+	queue.clear();
+	EXPECT_TRUE(queue.empty());
+}
+
 TEST_F(ordered_queue_test_suite, one_element)
 {
 	ordered_queue<int> queue;
@@ -61,6 +69,26 @@ TEST_F(ordered_queue_test_suite, one_element)
 	EXPECT_TRUE(queue.empty());
 
 	EXPECT_FALSE(queue.pop());
+	EXPECT_TRUE(queue.empty());
+}
+
+TEST_F(ordered_queue_test_suite, fill_and_clear)
+{
+	ordered_queue<int> queue;
+	queue.push(5);
+	EXPECT_FALSE(queue.empty());
+	queue.clear();
+	EXPECT_TRUE(queue.empty());
+}
+
+TEST_F(ordered_queue_test_suite, push_pop_clear)
+{
+	ordered_queue<int> queue;
+	queue.push(5);
+	EXPECT_FALSE(queue.empty());
+	queue.pop();
+	EXPECT_TRUE(queue.empty());
+	queue.clear();
 	EXPECT_TRUE(queue.empty());
 }
 

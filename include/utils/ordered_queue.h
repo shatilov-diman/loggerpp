@@ -61,6 +61,14 @@ namespace charivari_ltd::utils::lock_free
 
 	public:
 
+		ordered_queue()
+		{}
+
+		~ordered_queue()
+		{
+			clear();
+		}
+
 		// Thread safe
 		void push(item_t&& item)
 		{
@@ -75,6 +83,12 @@ namespace charivari_ltd::utils::lock_free
 				return deallocate(ptr);
 			}
 			return {};
+		}
+
+		void clear()
+		{
+			while (pop())
+				;
 		}
 
 		bool empty() const
