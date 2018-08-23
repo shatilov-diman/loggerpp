@@ -77,6 +77,11 @@ namespace charivari_ltd::utils::lock_free
 			return {};
 		}
 
+		bool empty() const
+		{
+			return front.load() == nullptr;
+		}
+
 	private:
 
 		static node_t* allocate(item_t&& item)

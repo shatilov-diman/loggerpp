@@ -49,15 +49,19 @@ TEST_F(ordered_queue_test_suite, empty)
 {
 	ordered_queue<int> queue;
 	EXPECT_FALSE(queue.pop());
+	EXPECT_TRUE(queue.empty());
 }
 
 TEST_F(ordered_queue_test_suite, one_element)
 {
 	ordered_queue<int> queue;
 	queue.push(5);
+	EXPECT_FALSE(queue.empty());
 	EXPECT_EQ(5, *queue.pop());
+	EXPECT_TRUE(queue.empty());
 
 	EXPECT_FALSE(queue.pop());
+	EXPECT_TRUE(queue.empty());
 }
 
 TEST_F(ordered_queue_test_suite, fifo)
