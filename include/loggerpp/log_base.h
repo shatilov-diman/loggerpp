@@ -123,24 +123,45 @@ namespace charivari_ltd::loggerpp
 		}
 
 	public:
-		template <typename string_t, typename ... args_t>
-		void log(const level& lvl, string_t&& format, args_t&& ... args) const
+		template <typename string_t>
+		void log(tags_t&& add_tags, const level& lvl, string_t&& message) const
 		{
-			auto&& message = formatter_t::format(std::move(format), std::forward<args_t>(args)...);
 			auto&& t = extend_front(tags, {
-				{constants::key_message, message},
+				{constants::key_message, std::move(message)},
 				{constants::key_level, lvl},
 				{constants::key_time, std::chrono::system_clock::now()},
 			});
+			t = extend_back(std::move(t), std::move(add_tags));
 			disp->push(traits_t::make_tags_handle(std::move(t)));
 		}
 
+		template <typename string_t, typename ... args_t>
+		void log(const level& lvl, tags_t&& add_tags, string_t&& format, args_t&& ... args) const
+		{
+			auto&& message = formatter_t::format(std::move(format), std::forward<args_t>(args)...);
+			return log(std::move(add_tags), lvl, std::move(message));
+		}
+		template <typename ... args_t>
+		void log(const level& lvl, tags_t&& add_tags, const char* message, args_t&& ... args) const
+		{
+			return log(lvl, std::move(add_tags), std::string(message), std::forward<args_t>(args)...);
+		}
+		template <typename ... args_t>
+		void log(const level& lvl, tags_t&& add_tags, const wchar_t* message, args_t&& ... args) const
+		{
+			return log(lvl, std::move(add_tags), std::wstring(message), std::forward<args_t>(args)...);
+		}
+
+		template <typename string_t, typename ... args_t>
+		void log(const level& lvl, string_t&& format, args_t&& ... args) const
+		{
+			return log(lvl, tags_t{}, std::move(format), std::forward<args_t>(args)...);
+		}
 		template <typename ... args_t>
 		void log(const level& lvl, const char* message, args_t&& ... args) const
 		{
 			return log(lvl, std::string(message), std::forward<args_t>(args)...);
 		}
-
 		template <typename ... args_t>
 		void log(const level& lvl, const wchar_t* message, args_t&& ... args) const
 		{

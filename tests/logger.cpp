@@ -141,6 +141,27 @@ TEST_F(logger_test_suite, check_extend_tags)
 	EXPECT_EQ(get_level(check[0]), loggerpp::level::debug);
 }
 
+TEST_F(logger_test_suite, check_extend_tags_in_place)
+{
+	logger root;
+
+	std::vector<logger::tags_t> check;
+	{
+		auto subscription = root >> [&check] (const auto& tags) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			check.push_back(tags);
+		};
+
+		root.debug(logger::tags_t {
+			{"aaa", std::wstring{L"BBB"}},
+		}, "test {}", "ccc");
+	}
+
+	EXPECT_EQ(check.size(), 1);
+	EXPECT_EQ(get_message(check[0]), "test ccc");
+	EXPECT_EQ(get_level(check[0]), loggerpp::level::debug);
+}
+
 TEST_F(logger_test_suite, check_extend_tags_by_pipe_operator)
 {
 	logger root;
