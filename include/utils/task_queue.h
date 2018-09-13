@@ -57,6 +57,7 @@ namespace charivari_ltd::utils
 
 		explicit task_queue(exception_handler_t&& handler) :
 			stop_requested {false},
+			wakeup_requested {false},
 			exception_handler{move_nonnullptr_or_die(std::move(handler))},
 			work([this] { run(); })
 		{}
@@ -81,14 +82,17 @@ namespace charivari_ltd::utils
 
 		void wake_up()
 		{
+			std::unique_lock<std::mutex> guard(mutex);
+			wakeup_requested = true;
 			signaler.notify_all();
 		}
 
 		void wait()
 		{
 			std::unique_lock<std::mutex> guard(mutex);
-			if (stop_requested == false)
+			if (stop_requested == false && wakeup_requested == false)
 				signaler.wait(guard);
+			wakeup_requested = false;
 		}
 
 		void run() noexcept
@@ -118,6 +122,7 @@ namespace charivari_ltd::utils
 
 	private:
 		std::atomic_bool stop_requested;
+		std::atomic_bool wakeup_requested;
 
 		std::mutex mutex;
 		std::condition_variable signaler;
