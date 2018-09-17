@@ -39,7 +39,9 @@
 #include <future>
 #include <thread>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	class worker :
 		public noncopyable
@@ -102,5 +104,6 @@ namespace charivari_ltd::utils
 		std::future<void> task_result;
 		std::thread thread;
 	};
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

@@ -33,7 +33,9 @@
 
 #pragma once
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	class noncopyable
 	{
@@ -54,5 +56,6 @@ namespace charivari_ltd::utils
 		nonmoveable& operator=(const nonmoveable&) = default;
 		nonmoveable& operator=(nonmoveable&&) = delete;
 	};
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

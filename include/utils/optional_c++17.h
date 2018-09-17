@@ -35,9 +35,12 @@
 
 #include <optional>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	template <typename arg_t>
 	using optional = std::optional<arg_t>;
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

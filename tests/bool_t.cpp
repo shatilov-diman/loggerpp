@@ -45,68 +45,68 @@ class bool_test_suite :
 TEST_F(bool_test_suite, check_default)
 {
 	utils::bool_t b;
-	EXPECT_EQ(false, static_cast<bool>(b));
+	EXPECT_FALSE(static_cast<bool>(b));
 }
 
 TEST_F(bool_test_suite, check_explicit_false)
 {
-	utils::bool_t b = false;
-	EXPECT_EQ(false, static_cast<bool>(b));
+	utils::bool_t b{false};
+	EXPECT_FALSE(static_cast<bool>(b));
 }
 
 TEST_F(bool_test_suite, check_explicit_true)
 {
-	utils::bool_t b = true;
-	EXPECT_EQ(true, static_cast<bool>(b));
+	utils::bool_t b{true};
+	EXPECT_TRUE(static_cast<bool>(b));
 }
 
 TEST_F(bool_test_suite, check_copy_false)
 {
-	utils::bool_t b = true;
+	utils::bool_t b{true};
 	b = false;
-	EXPECT_EQ(false, static_cast<bool>(b));
+	EXPECT_FALSE(static_cast<bool>(b));
 }
 
 TEST_F(bool_test_suite, check_copy_true)
 {
-	utils::bool_t b = false;
+	utils::bool_t b{false};
 	b = true;
-	EXPECT_EQ(true, static_cast<bool>(b));
+	EXPECT_TRUE(static_cast<bool>(b));
 }
 
 TEST_F(bool_test_suite, check_compare_false)
 {
-	utils::bool_t b = false;
-	EXPECT_EQ(true, b == false);
-	EXPECT_EQ(false, b != false);
-	EXPECT_EQ(false, b == true);
-	EXPECT_EQ(true, b != true);
+	utils::bool_t b{false};
+	EXPECT_TRUE(b == false);
+	EXPECT_FALSE(b != false);
+	EXPECT_FALSE(b == true);
+	EXPECT_TRUE(b != true);
 }
 
 TEST_F(bool_test_suite, check_compare_true)
 {
-	utils::bool_t b = true;
-	EXPECT_EQ(true, b == true);
-	EXPECT_EQ(false, b != true);
-	EXPECT_EQ(false, b == false);
-	EXPECT_EQ(true, b != false);
+	utils::bool_t b{true};
+	EXPECT_TRUE(b == true);
+	EXPECT_FALSE(b != true);
+	EXPECT_FALSE(b == false);
+	EXPECT_TRUE(b != false);
 }
 
 TEST_F(bool_test_suite, check_compare_bool_t_false)
 {
-	utils::bool_t b = false;
-	EXPECT_EQ(true, b == utils::bool_t{false});
-	EXPECT_EQ(false, b != utils::bool_t{false});
-	EXPECT_EQ(false, b == utils::bool_t{true});
-	EXPECT_EQ(true, b != utils::bool_t{true});
+	utils::bool_t b{false};
+	EXPECT_TRUE(b == utils::bool_t{false});
+	EXPECT_FALSE(b != utils::bool_t{false});
+	EXPECT_FALSE(b == utils::bool_t{true});
+	EXPECT_TRUE(b != utils::bool_t{true});
 }
 
 TEST_F(bool_test_suite, check_compare_bool_t_true)
 {
-	utils::bool_t b = true;
-	EXPECT_EQ(true, b == utils::bool_t{true});
-	EXPECT_EQ(false, b != utils::bool_t{true});
-	EXPECT_EQ(false, b == utils::bool_t{false});
-	EXPECT_EQ(true, b != utils::bool_t{false});
+	utils::bool_t b{true};
+	EXPECT_TRUE(b == utils::bool_t{true});
+	EXPECT_FALSE(b != utils::bool_t{true});
+	EXPECT_FALSE(b == utils::bool_t{false});
+	EXPECT_TRUE(b != utils::bool_t{false});
 }
 

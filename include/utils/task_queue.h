@@ -42,7 +42,9 @@
 #include <atomic>
 #include <mutex>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	class task_queue
 	{
@@ -131,5 +133,6 @@ namespace charivari_ltd::utils
 		lock_free::ordered_queue<task_t> queue;
 		worker work;
 	};
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

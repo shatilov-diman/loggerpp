@@ -33,7 +33,9 @@
 
 #pragma once
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	class bool_t
 	{
@@ -44,7 +46,7 @@ namespace charivari_ltd::utils
 
 		bool_t(const bool_t&) = default;
 		bool_t(bool_t&&) = default;
-		constexpr bool_t(const bool v):
+		constexpr explicit bool_t(const bool v):
 			value{v}
 		{}
 
@@ -92,5 +94,6 @@ namespace charivari_ltd::utils
 
 	constexpr bool_t false_t{false};
 	constexpr bool_t true_t{true};
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

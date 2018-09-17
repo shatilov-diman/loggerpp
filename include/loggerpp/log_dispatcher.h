@@ -40,7 +40,9 @@
 #include <future>
 #include <set>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd
+{
+namespace loggerpp
 {
 	template <typename tags_handle_t>
 	class dispatcher :
@@ -119,5 +121,6 @@ namespace charivari_ltd::loggerpp
 		std::set<consumer_fn*> consumers;
 		utils::task_queue queue;
 	};
-} //namespace charivari_ltd::loggerpp
+} //namespace loggerpp
+} //namespace charivari_ltd
 

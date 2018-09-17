@@ -38,7 +38,9 @@
 
 #include <fstream>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd
+{
+namespace loggerpp
 {
 namespace details
 {
@@ -89,5 +91,6 @@ namespace details
 	{
 		return build_base_file_log_consumer<default_log_traits>(path);
 	}
-} //namespace charivari_ltd::loggerpp
+} //namespace loggerpp
+} //namespace charivari_ltd
 

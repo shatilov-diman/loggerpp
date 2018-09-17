@@ -41,7 +41,9 @@
 #include <string>
 #include <chrono>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	namespace details
 	{
@@ -142,5 +144,6 @@ namespace charivari_ltd::utils
 			return details::null_wstr;
 		return to_wstring(std::string(arg));
 	}
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 

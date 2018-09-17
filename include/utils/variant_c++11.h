@@ -40,7 +40,9 @@
 
 #include <type_traits>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	template <typename arg_t, typename ... args_t>
 	class variant :
@@ -104,6 +106,8 @@ namespace charivari_ltd::utils
 				return;
 			if (assign_convertible(arg))
 				return;
+			if (assign_assignable(arg))
+				return;
 			throw std::runtime_error("bad_variant_assign");
 		}
 
@@ -124,11 +128,24 @@ namespace charivari_ltd::utils
 		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
 		bool assign_convertible(const type_t& arg)
 		{
-			_value = arg;
+			_value = static_cast<arg_t>(arg);
 			return true;
 		}
 		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
 		bool assign_convertible(const type_t& arg)
+		{
+			return variant<args_t...>::assign_same(arg);
+		}
+
+	protected:
+		template <typename type_t, typename = std::enable_if_t<std::is_assignable<type_t, arg_t>::value>>
+		bool assign_assignable(const type_t& arg)
+		{
+			_value = arg;
+			return true;
+		}
+		template <typename type_t, std::enable_if_t< ! std::is_assignable<type_t, arg_t>::value, int> = 0>
+		bool assign_assignable(const type_t& arg)
 		{
 			return variant<args_t...>::assign_same(arg);
 		}
@@ -204,11 +221,24 @@ namespace charivari_ltd::utils
 		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
 		bool assign_convertible(const type_t& arg)
 		{
-			_value = arg;
+			_value = static_cast<arg_t>(arg);
 			return true;
 		}
 		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
 		bool assign_convertible(const type_t& arg)
+		{
+			return false;
+		}
+
+	protected:
+		template <typename type_t, typename = std::enable_if_t<std::is_assignable<type_t, arg_t>::value>>
+		bool assign_assignable(const type_t& arg)
+		{
+			_value = arg;
+			return true;
+		}
+		template <typename type_t, std::enable_if_t< ! std::is_assignable<type_t, arg_t>::value, int> = 0>
+		bool assign_assignable(const type_t& arg)
 		{
 			return false;
 		}
@@ -225,6 +255,7 @@ namespace charivari_ltd::utils
 	{
 		return v.visit(cb);
 	}
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 
 

@@ -51,7 +51,7 @@ namespace loggerpp
 	{
 		using formatter_t = default_formatter;
 		using key_t = utils::variant<std::string, std::wstring>;
-		using value_t = utils::variant<nullptr_t, utils::bool_t, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
+		using value_t = utils::variant<std::nullptr_t, utils::bool_t, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
 
 		struct tag_t
 		{

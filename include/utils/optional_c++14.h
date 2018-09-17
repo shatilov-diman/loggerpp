@@ -39,10 +39,13 @@
 
 #include <experimental/optional>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	template <typename arg_t>
 	using optional = std::experimental::optional<arg_t>;
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 
 

@@ -41,7 +41,9 @@
 #include <string>
 #include <variant>
 
-namespace charivari_ltd::utils
+namespace charivari_ltd
+{
+namespace utils
 {
 	template <typename ... args_t>
 	using variant = std::variant<args_t...>;
@@ -57,6 +59,7 @@ namespace charivari_ltd::utils
 	{
 		return std::visit(std::forward<args_t>(args)...);
 	}
-} //namespace charivari_ltd::utils
+} //namespace utils
+} //namespace charivari_ltd
 
 

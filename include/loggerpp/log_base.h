@@ -44,7 +44,9 @@
 #include <optional>
 #include <type_traits>
 
-namespace charivari_ltd::loggerpp
+namespace charivari_ltd
+{
+namespace loggerpp
 {
 	namespace constants
 	{
@@ -255,5 +257,6 @@ namespace charivari_ltd::loggerpp
 	{
 		return extend_exception(ref, t);
 	}
-} //namespace charivari_ltd::loggerpp
+} //namespace loggerpp
+} //namespace charivari_ltd
 

@@ -1,6 +1,6 @@
 # loggerpp
 
-It's a framework for manage log messages. C++17 and above
+It's a framework for manage log messages. C++14 and above
 
 ## Notes
 
