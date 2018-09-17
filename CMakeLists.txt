@@ -11,6 +11,7 @@ add_executable(tests
 	./tests/bool_t.cpp
 	./tests/logger.cpp
 	./tests/worker.cpp
+	./tests/variant.cpp
 	./tests/to_string.cpp
 	./tests/task_queue.cpp
 	./tests/ordered_queue.cpp

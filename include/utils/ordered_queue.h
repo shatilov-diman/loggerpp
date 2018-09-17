@@ -33,9 +33,10 @@
 
 #pragma once
 
+#include "optional.h"
+
 #include <atomic>
 #include <utility>
-#include <optional>
 
 namespace charivari_ltd::utils::lock_free
 {
@@ -76,7 +77,7 @@ namespace charivari_ltd::utils::lock_free
 		}
 
 		// Not thread safe!
-		std::optional<item_t> pop()
+		utils::optional<item_t> pop()
 		{
 			if (auto ptr = pop(front, back))
 			{
@@ -107,9 +108,9 @@ namespace charivari_ltd::utils::lock_free
 			};
 		}
 
-		static std::optional<item_t> deallocate(node_t* node)
+		static utils::optional<item_t> deallocate(node_t* node)
 		{
-			std::optional<item_t> out{std::move(node->item)};
+			utils::optional<item_t> out{std::move(node->item)};
 			delete node;
 			return out;
 		}

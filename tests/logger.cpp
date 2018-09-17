@@ -311,8 +311,8 @@ TEST_F(logger_test_suite, check_not_found_tag)
 	logger::tags_t tags {
 		{"2", std::uint64_t{100UL}},
 	};
-	EXPECT_EQ(loggerpp::get_vtag(tags, "999").has_value(), false);
-	EXPECT_EQ(loggerpp::get_tag<double>(tags, "999").has_value(), false);
+	EXPECT_EQ(static_cast<bool>(loggerpp::get_vtag(tags, "999")), false);
+	EXPECT_EQ(static_cast<bool>(loggerpp::get_tag<double>(tags, "999")), false);
 }
 
 TEST_F(logger_test_suite, check_incorrect_tag_type)
@@ -320,7 +320,7 @@ TEST_F(logger_test_suite, check_incorrect_tag_type)
 	logger::tags_t tags {
 		{"2", std::uint64_t{100UL}},
 	};
-	EXPECT_EQ(loggerpp::get_vtag(tags, "2").has_value(), true);
+	EXPECT_EQ(static_cast<bool>(loggerpp::get_vtag(tags, "2")), true);
 	EXPECT_EQ(loggerpp::get_tag<std::uint64_t>(tags, "2"), 100UL);
 	EXPECT_THROW(loggerpp::get_tag<std::int64_t>(tags, "2"), std::exception);
 }

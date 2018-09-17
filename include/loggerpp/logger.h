@@ -38,6 +38,8 @@
 
 #include "../utils/utils.h"
 #include "../utils/bool_t.h"
+#include "../utils/variant.h"
+
 
 #include <iostream>
 
@@ -48,8 +50,8 @@ namespace loggerpp
 	struct default_log_traits
 	{
 		using formatter_t = default_formatter;
-		using key_t = std::variant<std::string, std::wstring>;
-		using value_t = std::variant<nullptr_t, utils::bool_t, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
+		using key_t = utils::variant<std::string, std::wstring>;
+		using value_t = utils::variant<nullptr_t, utils::bool_t, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
 
 		struct tag_t
 		{
@@ -116,51 +118,51 @@ namespace loggerpp
 	inline std::chrono::system_clock::time_point get_time(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::chrono::system_clock::time_point>(tags[constants::index_time].value);
+		return utils::get<std::chrono::system_clock::time_point>(tags[constants::index_time].value);
 	}
 
 	template<typename tags_t>
 	inline level get_level(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<level>(tags[constants::index_level].value);
+		return utils::get<level>(tags[constants::index_level].value);
 	}
 
 	template<typename tags_t>
 	inline std::string get_message(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::string>(tags[constants::index_message].value);
+		return utils::get<std::string>(tags[constants::index_message].value);
 	}
 
 	template<typename tags_t>
 	inline std::wstring get_wmessage(const tags_t& tags)
 	{
 		check_guarantee_size(tags);
-		return std::get<std::wstring>(tags[constants::index_message].value);
+		return utils::get<std::wstring>(tags[constants::index_message].value);
 	}
 
 	inline std::string to_string(const default_log_traits::key_t& key)
 	{
-		return std::visit([] (const auto& value) {
+		return utils::visit([] (const auto& value) {
 			return utils::to_string(value);
 		}, key);
 	}
 	inline std::wstring to_wstring(const default_log_traits::key_t& key)
 	{
-		return std::visit([] (const auto& value) {
+		return utils::visit([] (const auto& value) {
 			return utils::to_wstring(value);
 		}, key);
 	}
 	inline std::string to_string(const default_log_traits::value_t& value)
 	{
-		return std::visit([] (const auto& value) {
+		return utils::visit([] (const auto& value) {
 			return utils::to_string(value);
 		}, value);
 	}
 	inline std::wstring to_wstring(const default_log_traits::value_t& value)
 	{
-		return std::visit([] (const auto& value) {
+		return utils::visit([] (const auto& value) {
 			return utils::to_wstring(value);
 		}, value);
 	}
@@ -170,31 +172,31 @@ namespace loggerpp
 	{
 		for (const auto& t : tags)
 			if (to_string(t.key) == key)
-				return std::optional<decltype(t.value)>{t.value};
-		return std::optional<decltype(tags.begin()->value)>{};
+				return utils::optional<decltype(t.value)>{t.value};
+		return utils::optional<decltype(tags.begin()->value)>{};
 	}
 	template<typename tags_t>
 	inline auto get_vtag(const tags_t& tags, const std::wstring& key)
 	{
 		for (const auto& t : tags)
 			if (to_wstring(t.key) == key)
-				return std::optional<decltype(t.value)>{t.value};
-		return std::optional<decltype(tags.begin()->value)>{};
+				return utils::optional<decltype(t.value)>{t.value};
+		return utils::optional<decltype(tags.begin()->value)>{};
 	}
 
 	template<typename type_t, typename tags_t>
-	inline std::optional<type_t> get_tag(const tags_t& tags, const std::string& key)
+	inline utils::optional<type_t> get_tag(const tags_t& tags, const std::string& key)
 	{
 		if (auto t = get_vtag<tags_t>(tags, key))
-			return std::get<type_t>(*t);
-		return std::optional<type_t>{};
+			return utils::get<type_t>(*t);
+		return utils::optional<type_t>{};
 	}
 	template<typename type_t, typename tags_t>
-	inline std::optional<type_t> get_tag(const tags_t& tags, const std::wstring& key)
+	inline utils::optional<type_t> get_tag(const tags_t& tags, const std::wstring& key)
 	{
 		if (auto t = get_vtag<tags_t>(tags, key))
-			return std::get<type_t>(*t);
-		return std::optional<type_t>{};
+			return utils::get<type_t>(*t);
+		return utils::optional<type_t>{};
 	}
 
 	template <typename traits_t>
