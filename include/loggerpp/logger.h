@@ -49,7 +49,7 @@ namespace loggerpp
 	{
 		using formatter_t = default_formatter;
 		using key_t = std::variant<std::string, std::wstring>;
-		using value_t = std::variant<nullptr_t, utils::bool_t, char, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
+		using value_t = std::variant<nullptr_t, utils::bool_t, std::int64_t, std::uint64_t, double, std::string, std::wstring, level, std::chrono::system_clock::time_point>;
 
 		struct tag_t
 		{
