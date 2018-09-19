@@ -40,6 +40,7 @@
 #include <locale>
 #include <string>
 #include <chrono>
+#include <stdexcept>
 
 namespace charivari_ltd
 {
@@ -143,6 +144,14 @@ namespace utils
 		if (arg == nullptr)
 			return details::null_wstr;
 		return to_wstring(std::string(arg));
+	}
+
+	template <typename arg_t, typename new_val_t>
+	arg_t exchange(arg_t& dest, new_val_t&& new_val)
+	{
+		arg_t out(std::move(dest));
+		dest = new_val;
+		return out;
 	}
 } //namespace utils
 } //namespace charivari_ltd

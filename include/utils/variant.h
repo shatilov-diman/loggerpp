@@ -41,5 +41,7 @@
 #	else
 #		error "Missing <variant>"
 #	endif
+#else
+#	include "variant_c++11.h"
 #endif
 

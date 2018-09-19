@@ -38,8 +38,12 @@
 #		include "optional_c++17.h"
 #	elif __has_include(<experimental/optional>)
 #		include "optional_c++14.h"
+#	elif __has_include(<future>)
+#		include "optional_c++11.h"
 #	else
 #		error "Missing <optional>"
 #	endif
+#else
+#	include "optional_c++11.h"
 #endif
 

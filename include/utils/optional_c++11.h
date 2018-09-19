@@ -33,81 +33,67 @@
 
 #pragma once
 
-#include "noncopyable.h"
-
-#include <exception>
-#include <future>
-#include <thread>
+#include <memory>
 
 namespace charivari_ltd
 {
 namespace utils
 {
-	class worker :
-		public noncopyable
+	template <typename arg_t>
+	class optional
 	{
-	public:
-		using callback_t = std::function<void ()>;
-		using emergency_t = std::function<void (std::exception_ptr)>;
+		std::shared_ptr<arg_t> _value;
 
 	public:
-		worker() = default;
+		optional() = default;
+		optional(const optional& opt) = default;
+		optional(optional&& opt) = default;
 
-		worker(emergency_t&& emergency, callback_t&& cb) :
-			worker(std::move(cb), std::move(emergency))
-		{}
-
-		explicit worker(callback_t&& cb, emergency_t&& emergency = {}) :
-			callback(std::move(cb)),
-			emergency(std::move(emergency))
+		template <typename type = arg_t>
+		optional(type&& arg)
 		{
-			std::packaged_task<void ()> task {
-				std::bind(&worker::run, this)
-			};
-			task_result = task.get_future();
-			thread = std::thread(std::move(task));
+			_value = std::make_shared<arg_t>(std::move(arg));
 		}
 
-		void wait_and_rethrow_exception()
+		optional& operator=(const optional& opt) = default;
+
+		template <typename type = arg_t>
+		optional& operator=(type&& arg)
 		{
-			if (thread.joinable())
-			{
-				thread.join();
-				task_result.get();
-			}
+			_value = std::make_shared<arg_t>(std::move(arg));
 		}
 
-		~worker()
+		bool operator==(const optional& opt) const
 		{
-			try {
-				wait_and_rethrow_exception();
-			} catch (...) {
-				std::terminate();//explicit terminate application if exception wasn't handled by client code
-			}
+			return *_value == *opt._value;
 		}
 
-	private:
-		void run()
+		template <typename type = arg_t>
+		bool operator==(const type& val) const
 		{
-			if (callback)
-			{
-				try {
-					callback();
-				} catch (...) {
-					if (emergency == nullptr)
-						throw;
-
-					emergency(std::current_exception());
-				}
-			}
+			return *_value == val;
 		}
 
-	private:
-		callback_t callback;
-		emergency_t emergency;
-
-		std::future<void> task_result;
-		std::thread thread;
+		operator bool() const
+		{
+			return _value != nullptr;
+		}
+		const arg_t& operator*() const
+		{
+			return *_value;
+		}
+		arg_t& operator*()
+		{
+			return *_value;
+		}
+		const arg_t& value() const
+		{
+			return **this;
+		}
+		arg_t& value()
+		{
+			return **this;
+		}
 	};
 } //namespace utils
 } //namespace charivari_ltd

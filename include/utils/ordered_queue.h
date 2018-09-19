@@ -34,6 +34,7 @@
 #pragma once
 
 #include "optional.h"
+#include "utils.h"
 
 #include <atomic>
 #include <utility>
@@ -81,7 +82,7 @@ namespace lock_free
 		}
 
 		// Not thread safe!
-		utils::optional<item_t> pop()
+		optional<item_t> pop()
 		{
 			if (auto ptr = pop(front, back))
 			{
@@ -112,9 +113,9 @@ namespace lock_free
 			};
 		}
 
-		static utils::optional<item_t> deallocate(node_t* node)
+		static optional<item_t> deallocate(node_t* node)
 		{
-			utils::optional<item_t> out{std::move(node->item)};
+			optional<item_t> out{std::move(node->item)};
 			delete node;
 			return out;
 		}
@@ -140,11 +141,11 @@ namespace lock_free
 
 			auto tmp = back;
 			if (front.compare_exchange_strong(tmp, nullptr))
-				return std::exchange(back, nullptr);
+				return exchange(back, nullptr);
 
 			if (back->prev == nullptr)
 				fill_prev(front);
-			auto out = std::exchange(back, back->prev);
+			auto out = exchange(back, back->prev);
 			out->prev->next = nullptr;
 
 			return out;

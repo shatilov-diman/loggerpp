@@ -53,30 +53,30 @@ namespace utils
 	public:
 		variant() = default;
 
-		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_convertible<type_t, arg_t>::value>::type>
 		variant(const type_t& arg)
 		{
 			assign(arg);
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_convertible<type_t, arg_t>::value, int>::type = 0>
 		variant(const type_t& arg) :
 			variant<args_t...>(arg)
 		{}
 
-		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_convertible<type_t, arg_t>::value>::type>
 		variant& operator=(const type_t& arg)
 		{
 			assign(arg);
 			return *this;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_convertible<type_t, arg_t>::value, int>::type = 0>
 		variant& operator=(const type_t& arg)
 		{
 			variant<args_t...>::operator=(arg);
 			return *this;
 		}
 
-		template <typename value_t, typename = std::enable_if_t<std::is_same<value_t, arg_t>::value>>
+		template <typename value_t, typename = typename std::enable_if<std::is_same<value_t, arg_t>::value>::type>
 		value_t get() const
 		{
 			if (_value)
@@ -84,7 +84,7 @@ namespace utils
 			throw std::runtime_error("bad_variant_access");
 		}
 
-		template <typename value_t, std::enable_if_t< ! std::is_same<value_t, arg_t>::value, int> = 0>
+		template <typename value_t, typename std::enable_if< ! std::is_same<value_t, arg_t>::value, int>::type = 0>
 		value_t get() const
 		{
 			return variant<args_t...>::template get<value_t>();
@@ -92,6 +92,7 @@ namespace utils
 
 		template <typename callable_t>
 		auto visit(const callable_t& cb) const
+			-> decltype((cb(*_value)))
 		{
 			if (_value)
 				return cb(*_value);
@@ -112,39 +113,39 @@ namespace utils
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_same<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_same<type_t, arg_t>::value>::type>
 		bool assign_same(const type_t& arg)
 		{
 			_value = arg;
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_same<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_same<type_t, arg_t>::value, int>::type = 0>
 		bool assign_same(const type_t& arg)
 		{
 			return variant<args_t...>::assign_same(arg);
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_convertible<type_t, arg_t>::value>::type>
 		bool assign_convertible(const type_t& arg)
 		{
 			_value = static_cast<arg_t>(arg);
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_convertible<type_t, arg_t>::value, int>::type = 0>
 		bool assign_convertible(const type_t& arg)
 		{
 			return variant<args_t...>::assign_same(arg);
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_assignable<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_assignable<type_t, arg_t>::value>::type>
 		bool assign_assignable(const type_t& arg)
 		{
 			_value = arg;
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_assignable<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_assignable<type_t, arg_t>::value, int>::type = 0>
 		bool assign_assignable(const type_t& arg)
 		{
 			return variant<args_t...>::assign_same(arg);
@@ -177,7 +178,7 @@ namespace utils
 			return _value;
 		}
 
-		template <typename value_t, typename = std::enable_if_t<std::is_same<value_t, arg_t>::value>>
+		template <typename value_t, typename = std::enable_if<std::is_same<value_t, arg_t>::value>>
 		value_t get() const
 		{
 			if (_value)
@@ -187,6 +188,7 @@ namespace utils
 
 		template <typename callable_t>
 		auto visit(const callable_t& cb) const
+			-> decltype((cb(*_value)))
 		{
 			if (_value)
 				return cb(*_value);
@@ -205,39 +207,39 @@ namespace utils
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_same<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_same<type_t, arg_t>::value>::type>
 		bool assign_same(const type_t& arg)
 		{
 			_value = arg;
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_same<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_same<type_t, arg_t>::value, int>::type = 0>
 		bool assign_same(const type_t& arg)
 		{
 			return false;
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_convertible<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_convertible<type_t, arg_t>::value>::type>
 		bool assign_convertible(const type_t& arg)
 		{
 			_value = static_cast<arg_t>(arg);
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_convertible<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_convertible<type_t, arg_t>::value, int>::type = 0>
 		bool assign_convertible(const type_t& arg)
 		{
 			return false;
 		}
 
 	protected:
-		template <typename type_t, typename = std::enable_if_t<std::is_assignable<type_t, arg_t>::value>>
+		template <typename type_t, typename = typename std::enable_if<std::is_assignable<type_t, arg_t>::value>::type>
 		bool assign_assignable(const type_t& arg)
 		{
 			_value = arg;
 			return true;
 		}
-		template <typename type_t, std::enable_if_t< ! std::is_assignable<type_t, arg_t>::value, int> = 0>
+		template <typename type_t, typename std::enable_if< ! std::is_assignable<type_t, arg_t>::value, int>::type = 0>
 		bool assign_assignable(const type_t& arg)
 		{
 			return false;
@@ -245,13 +247,14 @@ namespace utils
 	};
 
 	template <typename value_t, typename variant_t>
-	auto get(const variant_t& v)
+	value_t get(const variant_t& v)
 	{
 		return v.template get<value_t>();
 	}
 
 	template <typename callable_t, typename variant_t>
 	auto visit(const callable_t& cb, const variant_t& v)
+		-> decltype((v.visit(cb)))
 	{
 		return v.visit(cb);
 	}

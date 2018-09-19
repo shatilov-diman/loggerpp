@@ -107,7 +107,7 @@ TEST_F(file_log_consumer_test_suite, check_common)
 	{
 		loggerpp::details::file_log_consumer<loggerpp::default_log_traits> consumer(log_test_file_name);
 		consumer.push(loggerpp::default_log_traits::tags_handle_t{
-			{std::string("time"), std::uint64_t{1534704464'123456789LL}},
+			{std::string("time"), std::uint64_t{1534704464123456789LL}},
 			{std::string("level"), loggerpp::level::info},
 			{std::string("message"), std::wstring{L"Hello, worlds"}},
 			{std::string("entity"), std::wstring{L"Test"}},

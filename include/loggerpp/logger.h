@@ -86,21 +86,21 @@ namespace loggerpp
 			return tags;
 		}
 
-		static inline auto begin_guaratee_tag(const tags_t& tags)
+		static inline typename tags_t::const_iterator begin_guaratee_tag(const tags_t& tags)
 		{
 			return tags.begin();
 		}
-		static inline auto end_guaratee_tag(const tags_t& tags)
+		static inline typename tags_t::const_iterator end_guaratee_tag(const tags_t& tags)
 		{
 			const auto index = std::min(constants::index_guaratee_size, tags.size());
 			return tags.begin() + index;
 		}
-		static inline auto begin_unguaratee_tag(const tags_t& tags)
+		static inline typename tags_t::const_iterator begin_unguaratee_tag(const tags_t& tags)
 		{
 			const auto index = std::min(constants::index_guaratee_size, tags.size());
 			return tags.begin() + index;
 		}
-		static inline auto end_unguaratee_tag(const tags_t& tags)
+		static inline typename tags_t::const_iterator end_unguaratee_tag(const tags_t& tags)
 		{
 			return tags.end();
 		}
@@ -142,33 +142,38 @@ namespace loggerpp
 		return utils::get<std::wstring>(tags[constants::index_message].value);
 	}
 
+	struct visitor {
+		template <typename arg_t>
+		std::string operator()(const arg_t& value) const {
+			return utils::to_string(value);
+		}
+	};
+	struct wvisitor {
+		template <typename arg_t>
+		std::wstring operator()(const arg_t& value) const {
+			return utils::to_wstring(value);
+		}
+	};
 	inline std::string to_string(const default_log_traits::key_t& key)
 	{
-		return utils::visit([] (const auto& value) {
-			return utils::to_string(value);
-		}, key);
+		return utils::visit(visitor(), key);
 	}
 	inline std::wstring to_wstring(const default_log_traits::key_t& key)
 	{
-		return utils::visit([] (const auto& value) {
-			return utils::to_wstring(value);
-		}, key);
+		return utils::visit(wvisitor(), key);
 	}
 	inline std::string to_string(const default_log_traits::value_t& value)
 	{
-		return utils::visit([] (const auto& value) {
-			return utils::to_string(value);
-		}, value);
+		return utils::visit(visitor(), value);
 	}
 	inline std::wstring to_wstring(const default_log_traits::value_t& value)
 	{
-		return utils::visit([] (const auto& value) {
-			return utils::to_wstring(value);
-		}, value);
+		return utils::visit(wvisitor(), value);
 	}
 
 	template<typename tags_t>
 	inline auto get_vtag(const tags_t& tags, const std::string& key)
+		-> utils::optional<decltype(tags.begin()->value)>
 	{
 		for (const auto& t : tags)
 			if (to_string(t.key) == key)
@@ -177,6 +182,7 @@ namespace loggerpp
 	}
 	template<typename tags_t>
 	inline auto get_vtag(const tags_t& tags, const std::wstring& key)
+		-> utils::optional<decltype(tags.begin()->value)>
 	{
 		for (const auto& t : tags)
 			if (to_wstring(t.key) == key)

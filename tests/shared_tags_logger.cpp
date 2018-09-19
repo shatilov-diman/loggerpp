@@ -72,10 +72,10 @@ TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_consumer)
 	shared_tags_logger root;
 	root.debug("1");
 	{
-		auto subscription1 = root >> [&check1] (const auto& tags_handle) {
+		auto subscription1 = root >> [&check1] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check1.push_back(tags_handle);
 		};
-		auto subscription2 = root >> [&check2] (const auto& tags_handle) {
+		auto subscription2 = root >> [&check2] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check2.push_back(tags_handle);
 		};
 		root.debug("2");
@@ -99,10 +99,10 @@ TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_own_thread_c
 	shared_tags_logger root;
 	root.debug("1");
 	{
-		auto subscription1 = root >> loggerpp::run_own_thread([&check1] (const auto& tags_handle) {
+		auto subscription1 = root >> loggerpp::run_own_thread([&check1] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check1.push_back(tags_handle);
 		});
-		auto subscription2 = root >> loggerpp::run_own_thread([&check2] (const auto& tags_handle) {
+		auto subscription2 = root >> loggerpp::run_own_thread([&check2] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check2.push_back(tags_handle);
 		});
 		root.debug("2");
@@ -125,11 +125,11 @@ TEST_F(shared_tags_logger_test_suite, check_order_of_own_threads)
 	shared_tags_logger root;
 	root.debug("1");
 	{
-		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			check.push_back(1);
 		});
-		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check.push_back(2);
 		});
 		root.debug("2");
@@ -149,7 +149,7 @@ TEST_F(shared_tags_logger_test_suite, check_order_on_destruct_own_threads)
 	shared_tags_logger root;
 	root.debug("0");
 	{
-		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+		auto subscription1 = root >> loggerpp::run_own_thread([&check] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			check.push_back(1);
 		});
@@ -157,7 +157,7 @@ TEST_F(shared_tags_logger_test_suite, check_order_on_destruct_own_threads)
 	}//wait while thread is finishing
 
 	{
-		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const auto& tags_handle) {
+		auto subscription2 = root >> loggerpp::run_own_thread([&check] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check.push_back(2);
 		});
 		root.debug("5");
@@ -177,10 +177,10 @@ TEST_F(shared_tags_logger_test_suite, check_shared_tags_logger_with_own_thread_c
 	shared_tags_logger root;
 	root.debug("1");
 	{
-		auto subscription1 = root >> loggerpp::run_own_thread() >> [&check1] (const auto& tags_handle) {
+		auto subscription1 = root >> loggerpp::run_own_thread() >> [&check1] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check1.push_back(tags_handle);
 		};
-		auto subscription2 = root >> loggerpp::run_own_thread() >> [&check2] (const auto& tags_handle) {
+		auto subscription2 = root >> loggerpp::run_own_thread() >> [&check2] (const shared_tags_logger::traits_t::tags_handle_t& tags_handle) {
 			check2.push_back(tags_handle);
 		};
 		root.debug("2");
@@ -205,10 +205,10 @@ TEST_F(shared_tags_logger_test_suite, check_logger_with_own_thread_consumer_with
 	logger root;
 	root.debug("1");
 	{
-		auto subscription1 = root >> loggerpp::run_own_thread() >> [&check1] (const auto& tags_handle) {
+		auto subscription1 = root >> loggerpp::run_own_thread() >> [&check1] (const logger::traits_t::tags_handle_t& tags_handle) {
 			check1.push_back(logger::traits_t::extract_tags(tags_handle));
 		};
-		auto subscription2 = root >> loggerpp::run_own_thread() >> [&check2] (const auto& tags) { //for default_logger_traits tags_t and tags_handler_t is the same
+		auto subscription2 = root >> loggerpp::run_own_thread() >> [&check2] (const logger::traits_t::tags_t& tags) { //for default_logger_traits tags_t and tags_handler_t is the same
 			check2.push_back(tags);
 		};
 		root.debug("2");

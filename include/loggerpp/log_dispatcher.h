@@ -53,6 +53,8 @@ namespace loggerpp
 		using exception_handler_t = utils::task_queue::exception_handler_t;
 
 	public:
+		using subscribtion_t = std::shared_ptr<consumer_fn>;
+
 		dispatcher() :
 			dispatcher([] (std::exception_ptr ptr) {
 				std::rethrow_exception(ptr);
@@ -66,24 +68,24 @@ namespace loggerpp
 			})
 		{}
 
-		auto subscribe(consumer_fn&& consumer)
+		subscribtion_t subscribe(consumer_fn&& consumer)
 		{
-			auto ptr = std::shared_ptr<consumer_fn>(new consumer_fn{std::move(consumer)}, [this](consumer_fn* ptr) {
+			subscribtion_t ptr(new consumer_fn(std::move(consumer)), [this](consumer_fn* ptr) {
 				unsubscribe(ptr);
 				delete ptr;
 			});
 
-			queue.push([this, ptr = ptr.get()] {
-				consumers.insert(ptr);
+			auto p = ptr.get();
+			queue.push([this, p] {
+				consumers.insert(p);
 			});
 			return ptr;
 		}
 
 		void push(tags_handle_t&& tags)
 		{
-			queue.push([this, tags{std::move(tags)}] {
-				dispatch(tags);
-			});
+			auto dispatch_fn = std::bind(&dispatcher<tags_handle_t>::dispatch, this, std::move(tags));
+			queue.push(dispatch_fn);
 		}
 
 	private:

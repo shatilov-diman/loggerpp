@@ -82,12 +82,12 @@ namespace loggerpp
 		}
 
 	protected:
-		template <typename string_t, typename arg_t, typename = std::enable_if_t<std::is_same<std::decay_t<string_t>, std::string>::value>>
+		template <typename string_t, typename arg_t, typename = typename std::enable_if<std::is_same<typename std::decay<string_t>::type, std::string>::value>::type>
 		static string_t to_string_t(arg_t&& arg)
 		{
 			return utils::to_string(arg);
 		}
-		template <typename string_t, typename arg_t, std::enable_if_t<std::is_same<std::decay_t<string_t>, std::wstring>::value>>
+		template <typename string_t, typename arg_t, typename std::enable_if<std::is_same<typename std::decay<string_t>::type, std::wstring>::value>::type>
 		static string_t to_string_t(arg_t&& arg)
 		{
 			return utils::to_wstring(arg);

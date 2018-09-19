@@ -41,7 +41,6 @@
 #include <deque>
 #include <chrono>
 #include <string>
-#include <optional>
 #include <type_traits>
 
 namespace charivari_ltd
@@ -76,10 +75,11 @@ namespace loggerpp
 		using tags_handle_t = typename traits_t::tags_handle_t;
 		using formatter_t = typename traits_t::formatter_t;
 
+	public:
 		using dispatcher_t = dispatcher<tags_handle_t>;
 		using dispatcher_ptr = std::shared_ptr<dispatcher_t>;
 
-	public:
+		using subscribtion_t = typename dispatcher_t::subscribtion_t;
 
 		static inline tags_t extend_back(tags_t&& tags, tags_t&& t)
 		{
@@ -235,12 +235,14 @@ namespace loggerpp
 
 	template <typename traits_t>
 	inline auto operator >> (const logger_base<traits_t>& ref, typename logger_base<traits_t>::dispatcher_t::consumer_fn&& consumer)
+		-> typename logger_base<traits_t>::subscribtion_t
 	{
 		return ref.get_dispatcher()->subscribe(std::move(consumer));
 	}
 
 	template <typename traits_t>
 	inline auto operator | (const logger_base<traits_t>& ref, typename traits_t::tag_t&& tag)
+		-> logger_base<traits_t>
 	{
 		typename traits_t::tags_t tags{std::move(tag)};
 		return extend_logger(ref, std::move(tags));
@@ -248,12 +250,14 @@ namespace loggerpp
 
 	template <typename traits_t>
 	inline auto operator | (const logger_base<traits_t>& ref, typename traits_t::tags_t&& tags)
+		-> logger_base<traits_t>
 	{
 		return extend_logger(ref, std::move(tags));
 	}
 
 	template <typename traits_t, typename exception_t>
 	inline auto operator | (const logger_base<traits_t>& ref, const exception_t& t)
+		-> logger_base<traits_t>
 	{
 		return extend_exception(ref, t);
 	}

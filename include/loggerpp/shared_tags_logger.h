@@ -79,13 +79,14 @@ namespace loggerpp
 	}
 
 	template<typename key_t>
-	inline auto get_tag(const shared_tags_log_traits::tags_handle_t& tags, const key_t& key)
+	inline auto get_vtag(const shared_tags_log_traits::tags_handle_t& tags, const key_t& key)
+		-> utils::optional<shared_tags_log_traits::value_t>
 	{
-		return get_tag(shared_tags_log_traits::extract_tags(tags), key);
+		return get_vtag(shared_tags_log_traits::extract_tags(tags), key);
 	}
 
 	template<typename type_t, typename key_t>
-	inline auto get_tag(const shared_tags_log_traits::tags_handle_t& tags, const key_t& key)
+	inline utils::optional<type_t> get_tag(const shared_tags_log_traits::tags_handle_t& tags, const key_t& key)
 	{
 		return get_tag<type_t>(shared_tags_log_traits::extract_tags(tags), key);
 	}
@@ -96,14 +97,31 @@ namespace loggerpp
 	}
 
 	template <typename consumer_t>
-	inline auto run_own_thread(consumer_t&& consumer)
+	struct own_thread_consumer
 	{
-		auto queue = std::make_shared<utils::task_queue>();
-		return [queue, consumer{std::move(consumer)}] (const auto& tags_handle) {
-			queue->push([&consumer, tags_handle] {
+		own_thread_consumer(consumer_t&& consumer) :
+			consumer(std::move(consumer)),
+			queue(std::make_shared<utils::task_queue>())
+
+		{}
+
+		template <typename tags_handle_t>
+		void operator()(const tags_handle_t& tags_handle) const
+		{
+			queue->push([this, tags_handle] {
 				consumer(tags_handle);
 			});
-		};
+		}
+
+	private:
+		consumer_t consumer;
+		std::shared_ptr<utils::task_queue> queue;
+	};
+
+	template <typename consumer_t>
+	inline own_thread_consumer<consumer_t> run_own_thread(consumer_t&& consumer)
+	{
+		return own_thread_consumer<consumer_t>(std::move(consumer));
 	}
 
 	namespace details
@@ -124,12 +142,14 @@ namespace loggerpp
 
 	template <typename traits_t>
 	inline auto operator >> (const logger_base<traits_t>& ref, const details::forward_to_thread&)
+		-> details::forward_logger_to_thread<logger_base<traits_t>>
 	{
 		return details::forward_logger_to_thread<logger_base<traits_t>>{ref};
 	}
 
-	template <typename logger_t, typename consumer_t>
-	inline auto operator >> (const details::forward_logger_to_thread<logger_t>& ref, consumer_t&& consumer)
+	template <typename traits_t, typename consumer_t>
+	inline auto operator >> (const details::forward_logger_to_thread<logger_base<traits_t>>& ref, consumer_t&& consumer)
+		-> typename logger_base<traits_t>::subscribtion_t
 	{
 		return ref.ref >> run_own_thread(std::move(consumer));
 	}

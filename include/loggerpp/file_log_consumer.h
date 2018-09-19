@@ -79,17 +79,25 @@ namespace details
 }//namespace details
 
 	template <typename traits_t>
-	inline auto build_base_file_log_consumer(const std::string& path)
+	struct file_log_consumer
 	{
-		auto consumer = std::make_shared<details::file_log_consumer<traits_t>>(path);
-		return [consumer] (const default_log_traits::tags_handle_t& tags_handle) {
-			consumer->push(tags_handle);
-		};
-	}
+		file_log_consumer(const std::string& path) :
+			consumer(std::make_shared<details::file_log_consumer<traits_t>>(path))
+		{
+		}
 
-	inline auto build_file_log_consumer(const std::string& path)
+		void operator()(const default_log_traits::tags_handle_t& tags_handle) const
+		{
+			consumer->push(tags_handle);
+		}
+
+	private:
+		std::shared_ptr<details::file_log_consumer<traits_t>> consumer;
+	};
+
+	inline file_log_consumer<default_log_traits> build_file_log_consumer(const std::string& path)
 	{
-		return build_base_file_log_consumer<default_log_traits>(path);
+		return file_log_consumer<default_log_traits>(path);
 	}
 } //namespace loggerpp
 } //namespace charivari_ltd

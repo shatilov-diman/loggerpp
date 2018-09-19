@@ -52,7 +52,7 @@ TEST_F(logger_test_suite, add_remove_subscription)
 {
 	logger root;
 	{
-		auto subscription = root.get_dispatcher()->subscribe([] (const auto& tags) {
+		auto subscription = root.get_dispatcher()->subscribe([] (const logger::tags_t& tags) {
 		});
 		(void)subscription;
 	}
@@ -62,7 +62,7 @@ TEST_F(logger_test_suite, add_remove_subscription_by_shift_operator)
 {
 	logger root;
 	{
-		auto s = root >> [] (const auto& tags) {
+		auto s = root >> [] (const logger::tags_t& tags) {
 		};
 		(void)s;
 	}
@@ -80,7 +80,7 @@ TEST_F(logger_test_suite, log_messages_with_consumer)
 	logger root;
 	root.debug("1");
 	{
-		auto subscription = root.get_dispatcher()->subscribe([&check] (const auto& tags) {
+		auto subscription = root.get_dispatcher()->subscribe([&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
 		});
@@ -97,13 +97,13 @@ TEST_F(logger_test_suite, log_two_consumers)
 	std::vector<std::string> check2;
 	logger root;
 	{
-		auto subscription1 = root >> [&check1] (const auto& tags) {
+		auto subscription1 = root >> [&check1] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check1.push_back(get_message(tags));
 		};
 		root.debug("1");
 		{
-			auto subscription2 = root >> [&check2] (const auto& tags) {
+			auto subscription2 = root >> [&check2] (const logger::tags_t& tags) {
 				std::this_thread::sleep_for(std::chrono::milliseconds(10));
 				check2.push_back(get_message(tags));
 			};
@@ -128,7 +128,7 @@ TEST_F(logger_test_suite, check_extend_tags)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
 		};
@@ -147,7 +147,7 @@ TEST_F(logger_test_suite, check_extend_tags_in_place)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
 		};
@@ -171,7 +171,7 @@ TEST_F(logger_test_suite, check_extend_tags_by_pipe_operator)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
 		};
@@ -193,7 +193,7 @@ TEST_F(logger_test_suite, check_extend_exception)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
 		};
@@ -216,7 +216,7 @@ TEST_F(logger_test_suite, check_extend_exception_by_pipe_operator)
 
 	std::vector<logger::tags_t> check;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(tags);
 		};
@@ -235,7 +235,7 @@ TEST_F(logger_test_suite, check_formatter_no_placeholder)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
 		};
@@ -250,7 +250,7 @@ TEST_F(logger_test_suite, check_formatter_no_arg)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
 		};
@@ -265,7 +265,7 @@ TEST_F(logger_test_suite, check_formatter)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
 		};
@@ -280,7 +280,7 @@ TEST_F(logger_test_suite, check_formatter_ex)
 	std::vector<std::string> check;
 	logger root;
 	{
-		auto subscription = root >> [&check] (const auto& tags) {
+		auto subscription = root >> [&check] (const logger::tags_t& tags) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 			check.push_back(get_message(tags));
 		};
@@ -349,3 +349,4 @@ TEST_F(logger_test_suite, check_types_in_tags)
 	EXPECT_EQ(loggerpp::get_tag<loggerpp::level>(tags, "7").value(), loggerpp::level::debug);
 	EXPECT_EQ(loggerpp::get_tag<std::chrono::system_clock::time_point>(tags, "8").value(), std::chrono::system_clock::time_point{std::chrono::system_clock::duration{777}});
 }
+
