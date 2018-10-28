@@ -117,9 +117,9 @@ namespace charivari_ltd::utils::lock_free
 	private:
 		static void push(node_ptr& front, node_t* node)
 		{
-			auto ptr = front.load();//speedup
 			for (;;)
 			{
+				auto ptr = front.load();
 				node->next = ptr;
 				if (front.compare_exchange_weak(ptr, node))
 					return;
