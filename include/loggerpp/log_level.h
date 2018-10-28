@@ -35,9 +35,7 @@
 
 #include <string>
 
-namespace charivari_ltd
-{
-namespace loggerpp
+namespace charivari_ltd::loggerpp
 {
 	enum class level
 	{
@@ -49,13 +47,13 @@ namespace loggerpp
 		error,
 		critical,
 	};
-} //namespace loggerpp
+} //namespace charivari_ltd::loggerpp
 
-namespace utils
+namespace charivari_ltd::utils
 {
-	inline std::string to_string(const loggerpp::level& l)
+	inline std::string to_string(const charivari_ltd::loggerpp::level& l)
 	{
-		using namespace loggerpp;
+		using namespace charivari_ltd::loggerpp;
 		switch (l)
 		{
 			case level::unknown: return "unknown";
@@ -68,9 +66,9 @@ namespace utils
 			default: return "undefined";
 		}
 	}
-	inline std::wstring to_wstring(const loggerpp::level& l)
+	inline std::wstring to_wstring(const charivari_ltd::loggerpp::level& l)
 	{
-		using namespace loggerpp;
+		using namespace charivari_ltd::loggerpp;
 		switch (l)
 		{
 			case level::unknown: return L"unknown";
@@ -83,6 +81,5 @@ namespace utils
 			default: return L"undefined";
 		}
 	}
-} //namespace utils
-} //namespace charivari_ltd
+} //namespace charivari_ltd::utils
 

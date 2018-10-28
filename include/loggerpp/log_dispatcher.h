@@ -33,8 +33,8 @@
 
 #pragma once
 
-#include "../utils/task_queue.h"
-#include "../utils/noncopyable.h"
+#include <utils/task_queue.h>
+#include <utils/noncopyable.h>
 
 #include <functional>
 #include <future>

@@ -34,7 +34,8 @@
 #pragma once
 
 #include "logger.h"
-#include "../utils/task_queue.h"
+
+#include <utils/task_queue.h>
 
 namespace charivari_ltd
 {

@@ -8,12 +8,7 @@ conan_basic_setup()
 
 add_executable(tests
 	./tests/main.cpp
-	./tests/bool_t.cpp
 	./tests/logger.cpp
-	./tests/worker.cpp
-	./tests/to_string.cpp
-	./tests/task_queue.cpp
-	./tests/ordered_queue.cpp
 	./tests/file_log_consumer.cpp
 	./tests/shared_tags_logger.cpp
 )

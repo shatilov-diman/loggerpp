@@ -36,7 +36,7 @@
 #include "log_level.h"
 #include "log_dispatcher.h"
 
-#include "../utils/noncopyable.h"
+#include <utils/noncopyable.h>
 
 #include <deque>
 #include <chrono>

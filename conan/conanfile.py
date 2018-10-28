@@ -19,7 +19,7 @@ class LoggerConan(ConanFile):
 		self.settings.compiler["Visual Studio"].version = "15"
 
 	def source(self):
-		self.run("git clone https://github.com/shatilov-diman/loggerpp.git .")
+		self.run("git clone --recurse-submodules https://github.com/shatilov-diman/loggerpp.git .")
 
 	def test(self):
 		cmake = CMake(self)

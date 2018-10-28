@@ -1,5 +1,6 @@
 [requires]
 gtest/master@conan/dev
+utils/1.0@charivari_ltd/dev
 
 [generators]
 cmake

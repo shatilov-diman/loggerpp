@@ -36,8 +36,8 @@
 #include "log_base.h"
 #include "log_formatter.h"
 
-#include "../utils/utils.h"
-#include "../utils/bool_t.h"
+#include <utils/utils.h>
+#include <utils/bool_t.h>
 
 #include <iostream>
 

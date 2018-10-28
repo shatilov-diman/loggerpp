@@ -33,7 +33,7 @@
 
 #pragma once
 
-#include "../utils/utils.h"
+#include <utils/utils.h>
 
 #include <string>
 #include <string_view>

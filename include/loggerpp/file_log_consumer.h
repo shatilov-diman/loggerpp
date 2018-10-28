@@ -34,7 +34,8 @@
 #pragma once
 
 #include "logger.h"
-#include "../utils/utils.h"
+
+#include <utils/utils.h>
 
 #include <fstream>
 
