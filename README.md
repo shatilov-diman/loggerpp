@@ -2,6 +2,8 @@
 
 It's a framework for manage log messages. C++11 and above
 
+For C++11 & C++14 you may use c++11 branch
+
 ## Notes
 
 All log messages are accumulated in one-thread log dispatcher and next each messages is forwarded to each consumer one by one.
